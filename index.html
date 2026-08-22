@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우리는 별에서 왔습니다 | EXHIBITION 2026 - NORMAN MYUNG</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Gowun+Batang:wght@400;700&family=Noto+Serif+KR:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 아이콘 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ... 기존 스타일 생략 ... */
+
+        /* 미리보기 이미지 스타일 */
+        .preview-image-section {
+            padding: 70px 20px 30px;
+            max-width: 1050px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .preview-image-section h2 {
+            font-family: 'Cinzel', serif;
+            color: #fff;
+            font-size: 2.1rem;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+        .preview-image-section .preview-image-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            background: #101c31;
+            padding: 42px 16px 36px;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.33), 0 0 18px rgba(56,182,211,0.15);
+            border: 1.5px solid rgba(56, 182, 211, 0.12);
+            margin-bottom: 18px;
+        }
+        .preview-image-section .preview-image {
+            max-width: 100%;
+            width: 540px;
+            border-radius: 10px;
+            box-shadow: 0 6px 22px rgba(0,0,0,0.32), 0 0 12px rgba(56,182,211,0.13);
+            background: #19273e;
+            border: 1px solid rgba(226,192,121,0.08);
+            display: block;
+        }
+        .preview-image-section .preview-caption {
+            font-size: 1.1rem;
+            color: var(--text-light, #ecefe9);
+            margin-top: 7px;
+            font-family: 'Montserrat', 'Noto Serif KR', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 640px) {
+            .preview-image-section .preview-image {
+                width: 100%;
+                min-width: 0;
+            }
+            .preview-image-section {
+                padding: 36px 4vw 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 미리보기 이미지 섹션 -->
+    <section class="preview-image-section">
+        <h2>전시회 미리보기</h2>
+        <div class="preview-image-container">
+            <img 
+                class="preview-image"
+                src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fdg9xzL%2FdJMcafnxlEB%2FAAAAAAAAAAAAAAAAAAAAAE0-390u27U4_tLZNVYR8be727saD1kGv8LuePjJS3jI%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DE81neCU26Y8V8Oa4K6Ga7l%252FvrWs%253D"
+                alt="전시회 미리보기 이미지"
+            >
+            <div class="preview-caption">
+                <i class="fa-regular fa-image"></i>
+                전시회 공간 & 대표 작품 분위기 미리보기
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
