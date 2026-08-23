@@ -8,7 +8,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Gowun+Batang:wght@400;700&family=Noto+Serif+KR:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome 아이콘 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -23,6 +23,8 @@
             --text-light: #ecefe9;
             --text-muted: #9aa8b8;
             --border-color: rgba(255, 255, 255, 0.12);
+            --font-sans: 'Montserrat', 'Noto Sans KR', sans-serif;
+            --font-serif: 'Noto Serif KR', serif;
         }
 
         * {
@@ -36,12 +38,13 @@
         }
 
         body {
-            font-family: 'Noto Serif KR', 'Gowun Batang', serif;
+            font-family: var(--font-sans);
             background-color: var(--bg-dark);
             color: var(--text-light);
             line-height: 1.8;
             word-break: keep-all;
             overflow-x: hidden;
+            letter-spacing: 0.02em;
         }
 
         /* ---------------- Header / Navigation ---------------- */
@@ -61,14 +64,16 @@
         }
 
         .logo {
-            font-family: 'Cinzel', serif;
+            font-family: var(--font-sans);
             font-size: 1.05rem;
-            letter-spacing: 2px;
+            font-weight: 400;
+            letter-spacing: 0.12em;
             color: #fff;
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 10px;
+            text-transform: uppercase;
         }
 
         .seal-point {
@@ -89,7 +94,7 @@
             text-decoration: none;
             margin-left: 26px;
             font-size: 0.88rem;
-            font-family: 'Montserrat', sans-serif;
+            font-family: var(--font-sans);
             letter-spacing: 1px;
             transition: color 0.3s;
         }
@@ -159,7 +164,7 @@
             padding: 8px 18px;
             border-radius: 30px;
             font-size: 0.9rem;
-            font-family: 'Montserrat', sans-serif;
+            font-family: var(--font-sans);
             color: var(--text-light);
             display: inline-flex;
             align-items: center;
@@ -184,7 +189,7 @@
         }
 
         .section-tag {
-            font-family: 'Montserrat', sans-serif;
+            font-family: var(--font-sans);
             font-size: 0.82rem;
             letter-spacing: 4px;
             color: var(--text-teal);
@@ -194,12 +199,14 @@
         }
 
         .section-title {
+            font-family: var(--font-sans);
             font-size: 2.2rem;
-            font-weight: 600;
+            font-weight: 400;
             color: #fff;
             position: relative;
             display: inline-block;
             padding-bottom: 15px;
+            letter-spacing: 0.04em;
         }
 
         .section-title::after {
@@ -227,6 +234,7 @@
         }
 
         .poem-text {
+            font-family: var(--font-serif);
             font-size: 1.05rem;
             line-height: 2.1;
             color: #c7d2de;
@@ -261,10 +269,13 @@
         }
 
         .performance-card h3 {
-            font-family: 'Cinzel', serif;
+            font-family: var(--font-sans);
             font-size: 1.7rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
             color: #ffffff;
             margin-bottom: 6px;
+            text-transform: uppercase;
         }
 
         .performance-card .perf-sub {
@@ -275,7 +286,7 @@
         }
 
         .performance-card .time {
-            font-family: 'Montserrat', sans-serif;
+            font-family: var(--font-sans);
             color: var(--text-gold);
             font-weight: 600;
             font-size: 1.1rem;
@@ -297,7 +308,7 @@
             color: var(--text-muted);
             padding: 12px 28px;
             font-size: 0.95rem;
-            font-family: 'Noto Serif KR', serif;
+            font-family: var(--font-sans);
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.3s;
@@ -330,7 +341,7 @@
             padding: 11px 24px;
             border-radius: 6px;
             font-size: 0.9rem;
-            font-family: 'Montserrat', 'Noto Serif KR', sans-serif;
+            font-family: var(--font-sans);
             transition: all 0.3s;
         }
 
@@ -414,14 +425,14 @@
         .art-tag {
             font-size: 0.75rem;
             color: var(--text-teal);
-            font-family: 'Montserrat', sans-serif;
+            font-family: var(--font-sans);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .art-title {
             font-size: 1.05rem;
-            font-weight: 600;
+            font-weight: 400;
             color: #fff;
             margin: 4px 0 6px;
         }
@@ -442,7 +453,7 @@
             font-size: 0.72rem;
             padding: 4px 10px;
             border-radius: 20px;
-            font-family: 'Montserrat', sans-serif;
+            font-family: var(--font-sans);
             font-weight: 600;
             z-index: 2;
         }
@@ -486,7 +497,7 @@
         .info-list .item-title {
             font-size: 0.82rem;
             color: var(--text-muted);
-            font-family: 'Montserrat', sans-serif;
+            font-family: var(--font-sans);
             letter-spacing: 1px;
             display: block;
             text-transform: uppercase;
@@ -593,6 +604,7 @@
 
         .modal-title {
             font-size: 1.3rem;
+            font-weight: 400;
             color: #fff;
             margin-bottom: 6px;
         }
@@ -600,7 +612,7 @@
         .modal-category {
             color: var(--text-teal);
             font-size: 0.85rem;
-            font-family: 'Montserrat', sans-serif;
+            font-family: var(--font-sans);
             margin-bottom: 10px;
         }
 
@@ -635,15 +647,17 @@
         }
 
         .footer-brand {
-            font-family: 'Cinzel', serif;
+            font-family: var(--font-sans);
             font-size: 1.2rem;
+            font-weight: 400;
             color: #fff;
             margin-bottom: 8px;
-            letter-spacing: 2px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
         }
 
         .footer-copy {
-            font-family: 'Montserrat', sans-serif;
+            font-family: var(--font-sans);
             font-size: 0.85rem;
             color: var(--text-muted);
             letter-spacing: 1px;
@@ -691,7 +705,10 @@
             .art-tag {
                 font-size: 0.65rem;
             }
-                    
+            .poem-text {
+                font-size: 0.84rem;
+                line-height: 1.68;
+            }
         }
         
     </style>
@@ -701,9 +718,7 @@
     <!-- Header -->
     <header>
         <a href="#" class="logo">
-            <span style="display:inline-block;width:130px;height:96px;vertical-align:middle;background:url('https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcBQPrX%2FdJMcajpJT0B%2FAAAAAAAAAAAAAAAAAAAAAFwtL2ig58KA2dkitNdhadT2zLHvXWFwpKJRLXYvkJmO%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DbrXzpIvJosAUzaaDl3%252FoBK6%252BU%252Bo%253D') no-repeat center/contain;"></span>
-      
-      
+            <span style="display:inline-block;width:104px;height:76.8px;vertical-align:middle;background:url('https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcBQPrX%2FdJMcajpJT0B%2FAAAAAAAAAAAAAAAAAAAAAFwtL2ig58KA2dkitNdhadT2zLHvXWFwpKJRLXYvkJmO%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DbrXzpIvJosAUzaaDl3%252FoBK6%252BU%252Bo%253D') no-repeat center/contain;"></span>
             <!-- <span class="seal-point">별</span>  -->
             NORMAN MYUNG
         </a>
@@ -868,22 +883,22 @@
             </div>
 
             <!-- Painting 4 -->
-            <div class="art-card" data-category="painting" onclick="openModal('창백한 푸른 점과 소나무', 'Painting', '우주 속 지구의 인연과 천년 소나무의 사유', 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="painting" onclick="openModal('겨울밤의 귀가', 'Painting', '가로등 아래, 눈내린 골목길을 함께 걷는 모녀의 따뜻한 귀갓길', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fb8esuI%2FdJMcagGK3iE%2FAAAAAAAAAAAAAAAAAAAAAAofVTHLlwbCYvlVQf3kOqCajYuCtm0WnVrRApxu85BI%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DEx37npTNtiErH3A%252BNDsnBzW6Jmc%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80" alt="창백한 푸른 점과 소나무">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fb8esuI%2FdJMcagGK3iE%2FAAAAAAAAAAAAAAAAAAAAAAofVTHLlwbCYvlVQf3kOqCajYuCtm0WnVrRApxu85BI%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DEx37npTNtiErH3A%252BNDsnBzW6Jmc%253D" alt="겨울밤의 귀가">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Painting #04</span>
-                    <h3 class="art-title">창백한 푸른 점과 소나무</h3>
+                    <h3 class="art-title">겨울밤의 귀가</h3>
                     <p class="art-desc">한지에 아크릴 및 먹</p>
                 </div>
             </div>
 
             <!-- Painting 5 -->
-            <div class="art-card" data-category="painting" onclick="openModal('길 위의 여명 (Dawn on the Road)', 'Painting', '끝없이 뻗은 사막 도로와 붉게 타오르는 새벽 지평선', 'https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="painting" onclick="openModal('길 위의 여명 (Dawn on the Road)', 'Painting', '끝없이 뻗은 사막 도로와 붉게 타오르는 새벽 지평선', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F6R06K%2FdJMcacjViHE%2FAAAAAAAAAAAAAAAAAAAAADwWSFb-gRhTX7zUZzYXiP2VVENZmrhV7F5equ9FrOhc%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Du0ZIpXnb089XdK01X68x42VVOy8%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=600&q=80" alt="길 위의 여명">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F6R06K%2FdJMcacjViHE%2FAAAAAAAAAAAAAAAAAAAAADwWSFb-gRhTX7zUZzYXiP2VVENZmrhV7F5equ9FrOhc%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Du0ZIpXnb089XdK01X68x42VVOy8%253D" alt="길 위의 여명">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
@@ -894,74 +909,74 @@
             </div>
 
             <!-- Painting 6 -->
-            <div class="art-card" data-category="painting" onclick="openModal('성산과 유채꽃 언덕', 'Painting', '노란 유채꽃 너머로 비치는 제주의 고요한 바다 풍경', 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="painting" onclick="openModal('봄의 서막', 'Painting', '황금빛 대지 위 붉은 빛 꽃망울을 터뜨리고 있는 홍매화', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FlE0Q7%2FdJMcaal4f5L%2FAAAAAAAAAAAAAAAAAAAAAM2XR6ad_fw7GSnF_twKf7ynFt1Nm0KwZ6T_8M5SlWX1%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DpPMKNapLw3rs5oR3I0%252B%252FVMvPYIs%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" alt="성산과 유채꽃 언덕">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FlE0Q7%2FdJMcaal4f5L%2FAAAAAAAAAAAAAAAAAAAAAM2XR6ad_fw7GSnF_twKf7ynFt1Nm0KwZ6T_8M5SlWX1%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DpPMKNapLw3rs5oR3I0%252B%252FVMvPYIs%253D" alt="봄의 서막">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Painting #06</span>
-                    <h3 class="art-title">성산과 유채꽃 언덕</h3>
+                    <h3 class="art-title">봄의 서막</h3>
                     <p class="art-desc">캔버스에 유채, 40호</p>
                 </div>
             </div>
 
             <!-- Painting 7 -->
-            <div class="art-card" data-category="painting" onclick="openModal('바다를 바라보는 여인', 'Painting', '노을 지는 해변 테라스에서 깊은 사색에 잠긴 순간', 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="painting" onclick="openModal('테라스의 여인', 'Painting', '노을 지는 해변 테라스에서 깊은 사색에 잠긴 순간', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FHXacc%2FdJMcaal4f5K%2FAAAAAAAAAAAAAAAAAAAAAA-h4lessI3tXS8t6gSn3GDwEv8EKN1nqn5odfjDZ_IA%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DGtv%252FJeoHWuKn8QZFgESjNnb3Woo%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80" alt="바다를 바라보는 여인">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FHXacc%2FdJMcaal4f5K%2FAAAAAAAAAAAAAAAAAAAAAA-h4lessI3tXS8t6gSn3GDwEv8EKN1nqn5odfjDZ_IA%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DGtv%252FJeoHWuKn8QZFgESjNnb3Woo%253D" alt="테라스의 여인">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Painting #07</span>
-                    <h3 class="art-title">바다를 바라보는 여인</h3>
-                    <p class="art-desc">캔버스에 오일, 30호</p>
+                    <h3 class="art-title">테라스의 여인</h3>
+                    <p class="art-desc">캔버스에 아크릴</p>
                 </div>
             </div>
 
             <!-- Painting 8 -->
-            <div class="art-card" data-category="painting" onclick="openModal('연못과 정자 (Lotus Pond)', 'Painting', '푸른 연잎 위로 맑게 비치는 연못과 고택의 정취', 'https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="painting" onclick="openModal('월하연가 (Moonlit Lotus Pond)', 'Painting', '달빛 아래 고택과 푸른 연못 위 피어난 백련', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FlcOOQ%2FdJMcaa7BLIc%2FAAAAAAAAAAAAAAAAAAAAAMVLPc-KaiikGM8OD91iDbJ57zpm3Hi4yrCvNZM4vhlX%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dyvj7Ij1CeBy8m3yvmCocFiDKqCQ%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=600&q=80" alt="연못과 정자">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FlcOOQ%2FdJMcaa7BLIc%2FAAAAAAAAAAAAAAAAAAAAAMVLPc-KaiikGM8OD91iDbJ57zpm3Hi4yrCvNZM4vhlX%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dyvj7Ij1CeBy8m3yvmCocFiDKqCQ%253D" alt="월하연가">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Painting #08</span>
-                    <h3 class="art-title">연못과 정자</h3>
+                    <h3 class="art-title">월하연가</h3>
                     <p class="art-desc">한국화 수묵채색</p>
                 </div>
             </div>
 
             <!-- Painting 9 -->
-            <div class="art-card" data-category="painting" onclick="openModal('바구니를 인 여인 (Motherhood)', 'Painting', '모성애와 강인한 삶의 서사를 묵직한 색채로 표현', 'https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="painting" onclick="openModal('모정(母情)', 'Painting', '모성애와 강인한 삶의 서사를 묵직한 색채로 표현', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FtGRyF%2FdJMcagGK3iD%2FAAAAAAAAAAAAAAAAAAAAAPk_gr9kMkEO6tM59NoWbpc7bzR-TvhKl6yvAg43unxw%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dj%252B6Lj3H43whGr30GotT1Z0P4W2E%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=600&q=80" alt="바구니를 인 여인">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FtGRyF%2FdJMcagGK3iD%2FAAAAAAAAAAAAAAAAAAAAAPk_gr9kMkEO6tM59NoWbpc7bzR-TvhKl6yvAg43unxw%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dj%252B6Lj3H43whGr30GotT1Z0P4W2E%253D" alt="모정">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Painting #09</span>
-                    <h3 class="art-title">바구니를 인 여인</h3>
-                    <p class="art-desc">혼합재료 판넬화</p>
+                    <h3 class="art-title">모정(母情)</h3>
+                    <p class="art-desc">한지와 분채</p>
                 </div>
             </div>
 
             <!-- Painting 10 -->
-            <div class="art-card" data-category="painting" onclick="openModal('포구의 해질녘 (Harbor Sunset)', 'Painting', '두 척의 고깃배와 붉은 태양이 머무는 잔잔한 포구', 'https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="painting" onclick="openModal('만조와 비상(High Tide and Flight)', 'Painting', '밀물에에 차오른 포구 위 새들의 힘찬 날갯짓', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fc0EDXD%2FdJMcabMfdI3%2FAAAAAAAAAAAAAAAAAAAAAH1d5sHuWUnkWaA2Kf7qa0CeP47SekqLfD_3A3Ki8v5X%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DFI1%252FDiY%252Bf2rm%252B9ho1muY%252B2Co0XM%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=600&q=80" alt="포구의 해질녘">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fc0EDXD%2FdJMcabMfdI3%2FAAAAAAAAAAAAAAAAAAAAAH1d5sHuWUnkWaA2Kf7qa0CeP47SekqLfD_3A3Ki8v5X%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DFI1%252FDiY%252Bf2rm%252B9ho1muY%252B2Co0XM%253D" alt="포구의 해질녘">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Painting #10</span>
-                    <h3 class="art-title">포구의 해질녘</h3>
-                    <p class="art-desc">캔버스에 유채, 50호</p>
+                    <h3 class="art-title">만조와 비상</h3>
+                    <p class="art-desc">캔버스에 아크릴</p>
                 </div>
             </div>
 
 
             <!-- ===== [CALLIGRAPHY 1~10] ===== -->
             <!-- Calligraphy 1 -->
-            <div class="art-card" data-category="calligraphy" onclick="openModal('우리는 별에서 왔습니다', 'Calligraphy', '한글 캘리그라피의 율동감과 붉은 전각이 어우러진 대표 타이틀 서예', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcuFJM4%2FdJMb99Od5zw%2FAAAAAAAAAAAAAAAAAAAAAC8PhA6XzgJb8Diw3FaoWS7AqfpdRLMLIrK2KHKGaGRh%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Di0nvhup1e5hWyPdURYv2UaksHSs%253D')">
+            <div class="art-card" data-category="calligraphy" onclick="openModal('우리는 별에서 왔습니다', 'Calligraphy', '한글 캘리그라피의 율동감과 붉은 전각이 어우러진 전시회 메인 타이틀', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcuFJM4%2FdJMb99Od5zw%2FAAAAAAAAAAAAAAAAAAAAAC8PhA6XzgJb8Diw3FaoWS7AqfpdRLMLIrK2KHKGaGRh%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Di0nvhup1e5hWyPdURYv2UaksHSs%253D')">
                 <div class="art-thumb">
                     <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcuFJM4%2FdJMb99Od5zw%2FAAAAAAAAAAAAAAAAAAAAAC8PhA6XzgJb8Diw3FaoWS7AqfpdRLMLIrK2KHKGaGRh%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Di0nvhup1e5hWyPdURYv2UaksHSs%253D" alt="우리는 별에서 왔습니다">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
@@ -974,119 +989,127 @@
             </div>
 
             <!-- Calligraphy 2 -->
-            <div class="art-card" data-category="calligraphy" onclick="openModal('沈默 (침묵과 사유)', 'Calligraphy', '마음 깊은 곳의 울림을 굵고 절제된 필선으로 조형화한 서예', 'https://images.unsplash.com/photo-1582561424760-0321d75e81fa?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="calligraphy" onclick="openModal('沈默 (침묵과 사랑)', 'Calligraphy', '침묵 속에서 깨닫는 신성한 사랑의 만남', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FRPqsN%2FdJMcadQDKWU%2FAAAAAAAAAAAAAAAAAAAAAEkfsldB9qc95HsD7dG78XF3le2VO6Y3eBsGipYFVcX9%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DxkraJnjH0iKUZO9Aqb1paSOXq8Y%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1582561424760-0321d75e81fa?auto=format&fit=crop&w=600&q=80" alt="沈默 (침묵과 사유)">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FRPqsN%2FdJMcadQDKWU%2FAAAAAAAAAAAAAAAAAAAAAEkfsldB9qc95HsD7dG78XF3le2VO6Y3eBsGipYFVcX9%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DxkraJnjH0iKUZO9Aqb1paSOXq8Y%253D" alt="沈默 (침묵과 사랑)">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Calligraphy #02</span>
-                    <h3 class="art-title">沈默 (침묵과 사유)</h3>
-                    <p class="art-desc">화선지에 농묵</p>
+                    <h3 class="art-title">沈默 (침묵과 사랑)</h3>
+                    <p class="art-desc">한지에 농묵</p>
                 </div>
             </div>
 
             <!-- Calligraphy 3 -->
-            <div class="art-card" data-category="calligraphy" onclick="openModal('白馬 (백마의 기상)', 'Calligraphy', '질주하는 백마의 역동적인 기운을 초서의 획으로 구현', 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="calligraphy" onclick="openModal('광야 (The Wilderness of Hope)', 'Calligraphy', '질주하는 백마의 역동적인 기운을 초서의 획으로 구현', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F5wipX%2FdJMb99Od5zo%2FAAAAAAAAAAAAAAAAAAAAAALb4rVBpoKkvK166Oit_7oCWCpt6-36DG2TD5tJlYCN%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DQNMSXmOhxr0tauz0sNAplRGDnxM%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80" alt="白馬 (백마)">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F5wipX%2FdJMb99Od5zo%2FAAAAAAAAAAAAAAAAAAAAAALb4rVBpoKkvK166Oit_7oCWCpt6-36DG2TD5tJlYCN%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DQNMSXmOhxr0tauz0sNAplRGDnxM%253D" alt="광야">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Calligraphy #03</span>
-                    <h3 class="art-title">白馬 (백마)</h3>
-                    <p class="art-desc">금지(金紙)에 먹, 초서체</p>
+                    <h3 class="art-title">
+                        광야
+                        <span style="font-size: 90%; letter-spacing: -0.02em;">(The Wilderness of Hope)</span>
+                    </h3>      
+            
+                    <p class="art-desc">전통 한지와 먹</p>
                 </div>
             </div>
 
             <!-- Calligraphy 4 -->
-            <div class="art-card" data-category="calligraphy" onclick="openModal('蘭草 (난초의 향기)', 'Calligraphy', '은은한 묵향처럼 번지는 난초의 고결함을 담은 필묵', 'https://images.unsplash.com/photo-1578321272176-b7bbc0679853?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="calligraphy" onclick="openModal('북한강에서 (At the River)', 'Calligraphy', '북한강 새벽바람 속 마주한 위로의 순간', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FCmpsb%2FdJMcadQDKWP%2FAAAAAAAAAAAAAAAAAAAAAOgS-ICUwNjZZ3vp5VIDdU-LhYSQ54mVVyTXkQECg7ei%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DtdxN5D9tn5CvtJCEq2PMzq77ODY%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1578321272176-b7bbc0679853?auto=format&fit=crop&w=600&q=80" alt="蘭草 (난초)">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FCmpsb%2FdJMcadQDKWP%2FAAAAAAAAAAAAAAAAAAAAAOgS-ICUwNjZZ3vp5VIDdU-LhYSQ54mVVyTXkQECg7ei%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DtdxN5D9tn5CvtJCEq2PMzq77ODY%253D" alt="북한강에서">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Calligraphy #04</span>
-                    <h3 class="art-title">蘭草 (난초)</h3>
+                    <h3 class="art-title">북한강에서 (At the River)</h3>
                     <p class="art-desc">수묵 캘리그라피</p>
                 </div>
             </div>
 
             <!-- Calligraphy 5 -->
-            <div class="art-card" data-category="calligraphy" onclick="openModal('산골 물소리 (산수서)', 'Calligraphy', '산과 물, 바람의 소리를 글자의 상형적 조형으로 엮어낸 작품', 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="calligraphy" onclick="openModal('성찰 (Reflection)', 'Calligraphy', '법정 스님의 말씀으로 돌아보는 삶의 내면', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Ft7Ij3%2FdJMcacYzIbF%2FAAAAAAAAAAAAAAAAAAAAAEZVmt6zdqZioB7G_O9ob9zpauYolGnTroyZ61O_GHVk%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DyDggCiYLbskxOxJCyJLeNv9sSPw%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80" alt="산골 물소리">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Ft7Ij3%2FdJMcacYzIbF%2FAAAAAAAAAAAAAAAAAAAAAEZVmt6zdqZioB7G_O9ob9zpauYolGnTroyZ61O_GHVk%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DyDggCiYLbskxOxJCyJLeNv9sSPw%253D" alt="성찰">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Calligraphy #05</span>
-                    <h3 class="art-title">산골 물소리</h3>
-                    <p class="art-desc">대형 한지 족자</p>
+                    <h3 class="art-title">성찰 (Reflection)</h3>
+                    <p class="art-desc">한지 족자</p>
                 </div>
             </div>
 
             <!-- Calligraphy 6 -->
-            <div class="art-card" data-category="calligraphy" onclick="openModal('동행 (Accompany)', 'Calligraphy', '함께 걷는 두 사람의 따뜻한 호흡을 형상화한 문자예술', 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="calligraphy" onclick="openModal('동행 (Companion)', 'Calligraphy', '지구별 여행을 함께하는 인연의 고마움', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FckV7YR%2FdJMcadQDKWR%2FAAAAAAAAAAAAAAAAAAAAALsKEeHDWqQQsFnyxCyG8KUiEDSqaIkW43sWtdOyM9-e%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DOTsrvpAL%252B6vbYR%252F3N2X0%252FlgVjSw%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80" alt="동행">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FckV7YR%2FdJMcadQDKWR%2FAAAAAAAAAAAAAAAAAAAAALsKEeHDWqQQsFnyxCyG8KUiEDSqaIkW43sWtdOyM9-e%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DOTsrvpAL%252B6vbYR%252F3N2X0%252FlgVjSw%253D" alt="동행">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Calligraphy #06</span>
-                    <h3 class="art-title">동행 (同行)</h3>
-                    <p class="art-desc">먹과 붉은 인주, 화선지</p>
+                    <h3 class="art-title">동행 (Companion)</h3>
+                    <p class="art-desc">화선지와 먹</p>
                 </div>
             </div>
 
             <!-- Calligraphy 7 -->
-            <div class="art-card" data-category="calligraphy" onclick="openModal('하늘과 바람과 별 (윤동주 서시 필서)', 'Calligraphy', '별을 노래하는 시인의 마음을 담담하고 청초한 필치로 기록', 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="calligraphy" onclick="openModal('하늘과 바람과 별 (윤동주 서시 필서)', 'Calligraphy', '별을 노래하는 시인의 마음을 담담하고 청초한 필치로 기록', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FIQwMI%2FdJMcaiEvOWg%2FAAAAAAAAAAAAAAAAAAAAAH4xF7bT1xywliP5vhHJ3pvevHd6WSKF6C7sL8OcwK7P%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DEg7ipxvdsqVAsK3BkkBqIz%252FKeWw%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=600&q=80" alt="하늘과 바람과 별">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FIQwMI%2FdJMcaiEvOWg%2FAAAAAAAAAAAAAAAAAAAAAH4xF7bT1xywliP5vhHJ3pvevHd6WSKF6C7sL8OcwK7P%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DEg7ipxvdsqVAsK3BkkBqIz%252FKeWw%253D" alt="하늘과 바람과 별">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Calligraphy #07</span>
                     <h3 class="art-title">하늘과 바람과 별</h3>
-                    <p class="art-desc">고서(古書) 필서 기법</p>
+                    <p class="art-desc">한지, 캘리그라피</p>
                 </div>
             </div>
 
             <!-- Calligraphy 8 -->
-            <div class="art-card" data-category="calligraphy" onclick="openModal('훈민정음 언해본 서문', 'Calligraphy', '한글의 창제 원리와 조형미를 현대적 판본체로 재해석', 'https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="calligraphy" onclick="openModal('지나가는 길에 (On the Way)', 'Calligraphy', '삶의 여정 중 스쳐 가는 순간의 단상', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FlURtg%2FdJMcaiEvOWd%2FAAAAAAAAAAAAAAAAAAAAAHZizGK-RHiWeSZ6cPg3jvduYJLOHYJvwiWwPDIGaNoM%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DB0Wdh7w2yuB%252FpnA%252BOd0EUHj5iSo%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?auto=format&fit=crop&w=600&q=80" alt="훈민정음 서문">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FlURtg%2FdJMcaiEvOWd%2FAAAAAAAAAAAAAAAAAAAAAHZizGK-RHiWeSZ6cPg3jvduYJLOHYJvwiWwPDIGaNoM%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DB0Wdh7w2yuB%252FpnA%252BOd0EUHj5iSo%253D" alt="지나가는 길에">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Calligraphy #08</span>
-                    <h3 class="art-title">훈민정음 서문</h3>
-                    <p class="art-desc">닥종이 한지, 먹</p>
+                    <h3 class="art-title">지나가는 길에 (On the Way)</h3>
+                    <p class="art-desc">닥종이 한지, 서화합일</p>
                 </div>
             </div>
 
             <!-- Calligraphy 9 -->
-            <div class="art-card" data-category="calligraphy" onclick="openModal('달빛사냥꾼 시그니처 (Moonlight Hunter)', 'Calligraphy', '작가의 호(號)이자 세계관을 은유하는 대표 캘리그라피 로고', 'https://images.unsplash.com/photo-1579783901586-d88db74b4fe4?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="calligraphy" onclick="openModal('만추 (Late Autumn)', 'Calligraphy', '황토빛 노을로 물든 늦가을의 서정적 단상', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FdNhOwk%2FdJMb99Od5zm%2FAAAAAAAAAAAAAAAAAAAAAIlILoGzkIUGfaFLUCXsDwP9Rcy87Md0k9XtDSO8fn_i%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D0vfEPbHevpa1Vx4gJstid3bXvBU%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1579783901586-d88db74b4fe4?auto=format&fit=crop&w=600&q=80" alt="달빛사냥꾼">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FdNhOwk%2FdJMb99Od5zm%2FAAAAAAAAAAAAAAAAAAAAAIlILoGzkIUGfaFLUCXsDwP9Rcy87Md0k9XtDSO8fn_i%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D0vfEPbHevpa1Vx4gJstid3bXvBU%253D" alt="만추">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Calligraphy #09</span>
-                    <h3 class="art-title">달빛사냥꾼 로고</h3>
-                    <p class="art-desc">캘리그라피 & 전각 아트</p>
+                    <h3 class="art-title">
+                        만추 
+                        <span style="font-size:0.8rem; letter-spacing:0.02em; display:inline;">(Late Autumn)</span>
+                    </h3>
+     
+                    <p class="art-desc">한지, 서화합일</p>
                 </div>
             </div>
 
             <!-- Calligraphy 10 -->
-            <div class="art-card" data-category="calligraphy" onclick="openModal('신체 (新體 - 영혼의 춤)', 'Calligraphy', '대붓의 역동성과 퍼포먼스의 에너지가 그대로 응축된 현대 서예', 'https://images.unsplash.com/photo-1580136579312-94651dfd596d?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" data-category="calligraphy" onclick="openModal('아버지 (Father)', 'Calligraphy', '아버지의 뒷모습에 투영된 삶의 여정', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FlI1bX%2FdJMb99Od5zp%2FAAAAAAAAAAAAAAAAAAAAAHFPEU17jjPDcjxXKIHKcH1jGZth2O2YMe3e2U_GuOpk%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Du9rClymc53mcXlAJohgZCqfFcuM%253D')">
                 <div class="art-thumb">
-                    <img src="https://images.unsplash.com/photo-1580136579312-94651dfd596d?auto=format&fit=crop&w=600&q=80" alt="신체 (영혼의 춤)">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FlI1bX%2FdJMb99Od5zp%2FAAAAAAAAAAAAAAAAAAAAAHFPEU17jjPDcjxXKIHKcH1jGZth2O2YMe3e2U_GuOpk%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Du9rClymc53mcXlAJohgZCqfFcuM%253D" alt="아버지">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Calligraphy #10</span>
-                    <h3 class="art-title">신체 (영혼의 춤)</h3>
-                    <p class="art-desc">퍼포먼스 원작, 대형 수묵화</p>
+                    <h3 class="art-title">아버지 (Father)</h3>
+                    <p class="art-desc">한지, 서화합일</p>
                 </div>
             </div>
 
@@ -1097,94 +1120,94 @@
     <section id="merch" style="background: rgba(255, 255, 255, 0.015); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
         <div class="section-header">
             <span class="section-tag">Exhibition Official Goods</span>
-            <h2 class="section-title">전시 공식 티셔츠 샘플 (6종)</h2>
+            <h2 class="section-title">전시회 공식 티셔츠 (6종)</h2>
             <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 12px;">
-                작가의 한글 캘리그라피와 라이브 퍼포먼스 모티브가 새겨진 한정판 아트 티셔츠 컬렉션입니다.
+                작가의 한글 캘리그라피와 작품 모티브가 프린트된 검정 반팔 티셔츠 20수 한정판 컬렉션입니다.
             </p>
         </div>
 
         <div class="art-grid">
             <!-- T-Shirt 1 -->
-            <div class="art-card" onclick="openModal('전시 공식 한정판 티셔츠 (Official Front & Back)', 'Official Merch #01', '앞면: 우리는 별에서 왔습니다 캘리그라피 / 뒷면: The Soul in Motion 대붓 퍼포먼스 드로잉이 프린팅된 시그니처 블랙 티셔츠', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FdlqX3K%2FdJMcafHQbqI%2FAAAAAAAAAAAAAAAAAAAAAMrvx1CUJl2nWNeRimzT1qJe9mMqTOblGLhE_OU0eDul%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DyrohPE%252BPvcblI5LKjyl%252BrUCJLa4%253D')">
+            <div class="art-card" onclick="openModal('전시 공식 한정판 티셔츠 (Official Front & Back)', 'Official Merch #01', '검정 반팔 티셔츠 20수. 앞면: 전시회 메인 타이틀 EXHIBITION 2026 / 뒷면: 우리는 별에서 왔습니다 메인 포스터 프린팅', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FdGOTIP%2FdJMcaf8JXpR%2FAAAAAAAAAAAAAAAAAAAAAMSR0JAvR-u_RD8sB4NQa3LNjrMJyMGWSU_GYtHyN7z2%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dr8hI6TTEYfEgsvMkvVNDT8iO128%253D')">
                 <div class="art-thumb">
                     <span class="merch-badge">SIGNATURE</span>
-                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FpYXei%2FdJMcadwhMSK%2FAAAAAAAAAAAAAAAAAAAAADNV2KBroLb3rPZyJafTxpB_8In-lrIUpbxpaTXFU1Fc%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Deg5xzvvFqwyoQFC3dOshbADYIUQ%253D" alt="공식 시그니처 블랙 티셔츠">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FpYXei%2FdJMcadwhMSK%2FAAAAAAAAAAAAAAAAAAAAADNV2KBroLb3rPZyJafTxpB_8In-lrIUpbxpaTXFU1Fc%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Deg5xzvvFqwyoQFC3dOshbADYIUQ%253D" alt="공식 시그니처 블랙 반팔 티셔츠">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Merchandise 01</span>
-                    <h3 class="art-title">시그니처 블랙 에디션</h3>
-                    <p class="art-desc">우리는 별에서 왔습니다 & 퍼포먼스 그래픽</p>
+                    <h3 class="art-title">시그니처 에디션</h3>
+                    <p class="art-desc">검정 반팔 티셔츠 20수</p>
                 </div>
             </div>
 
             <!-- T-Shirt 2 -->
-            <div class="art-card" onclick="openModal('달빛사냥꾼 앰블럼 티셔츠 (Moon Light Hunter Tee)', 'Official Merch #02', '가슴 중앙에 옐로우 그물망과 달빛사냥꾼 캐릭터 아트워크가 미니멀하게 새겨진 데일리 티셔츠', 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" onclick="openModal('달빛사냥꾼 (Moon Light Hunter)', 'Official Merch #02', '검정 반팔 티셔츠 20수. 앞면: 전시회 메인 타이틀 / 뒷면: 달빛사냥꾼 캐릭터 아트워크', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FdgRwRy%2FdJMcafVmdBy%2FAAAAAAAAAAAAAAAAAAAAAN8A3CyZcP4bsm7a_HvpLTlsdDcg90FL3WNS2zSQIm0m%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D2ZTTE26FND48x9C5h4IgtNeaY6Y%253D')">
                 <div class="art-thumb">
                     <span class="merch-badge">LIMITED</span>
-                    <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=600&q=80" alt="달빛사냥꾼 앰블럼 티셔츠">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FeiVsLS%2FdJMcadb0snJ%2FAAAAAAAAAAAAAAAAAAAAAPQao4fehAYcBCQH5lp2YHmMQtze0FFvIgsyasVo4w8p%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dca7y25yeXLQzLvTP%252FQeGDzUdH4Y%253D" alt="달빛사냥꾼 앰블럼 블랙 반팔 티셔츠">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Merchandise 02</span>
-                    <h3 class="art-title">달빛사냥꾼 엠블럼 티</h3>
-                    <p class="art-desc">고급 코마사 20수 코튼, 자수 & 실크스크린</p>
+                    <h3 class="art-title">달빛사냥꾼 아트워크</h3>
+                    <p class="art-desc">검정 반팔 티셔츠 20수</p>
                 </div>
             </div>
 
             <!-- T-Shirt 3 -->
-            <div class="art-card" onclick="openModal('The Soul in Motion 백프린팅 티셔츠', 'Official Merch #03', '대붓을 쥐고 온몸으로 획을 긋는 서예가의 역동적인 실루엣이 등판 전체에 입혀진 아트 티셔츠', 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" onclick="openModal('아버지 (Father)', 'Official Merch #03', '검정 반팔 티셔츠 20수. 앞면: 전시회 메인 타이틀 / 뒷면: 아버지 캘리그라피 아트워크', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbrziuK%2FdJMcafVmdBw%2FAAAAAAAAAAAAAAAAAAAAAMgVZYywUC4o2AVpndV7TLFfwBsvhoJ0evqFgLpqtzDX%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D3qqRHC4gKchrWOX3TvMOWd82C6A%253D')">
                 <div class="art-thumb">
-                    <span class="merch-badge">PERFORMANCE</span>
-                    <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=600&q=80" alt="Soul in Motion 퍼포먼스 티">
+                    <span class="merch-badge">LIMITED</span>
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FvWADs%2FdJMcadb0snI%2FAAAAAAAAAAAAAAAAAAAAAJ7SMPm-FE1dEQnslDGCfdceSNyHN1n6143YkRphwlZL%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DmNZhLb7%252FLgZebzsq%252Ba78dW2COqU%253D" alt="Soul in Motion 블랙 반팔 티셔츠">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Merchandise 03</span>
-                    <h3 class="art-title">The Soul in Motion 백프린팅</h3>
-                    <p class="art-desc">오버핏 실루엣, 묵직한 스트릿 감성</p>
+                    <h3 class="art-title">아버지 아트워크</h3>
+                    <p class="art-desc">검정 반팔 티셔츠 20수</p>
                 </div>
             </div>
 
             <!-- T-Shirt 4 -->
-            <div class="art-card" onclick="openModal('창백한 푸른 점 (Pale Blue Dot) 에디션', 'Official Merch #04', '보이저 위성의 감동적인 서정시와 푸른 점 그래픽이 소매와 백라인에 포인트로 디자인된 티셔츠', 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" onclick="openModal('동행 캘리그라피 아트워크', 'Official Merch #04', '검정 반팔 티셔츠 20수. 보이저 위성의 서정시와 푸른 점 그래픽이 소매와 백라인에 포인트로 디자인된 티셔츠', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbGnSAx%2FdJMcaafq0hH%2FAAAAAAAAAAAAAAAAAAAAAPAozEsm0QCFsrsVtBevT6jfUu7NmsleNcKqEax8bi4x%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D2tKuDMG8oZ%252F%252B37uCFMi2YScdRQk%253D')">
                 <div class="art-thumb">
                     <span class="merch-badge">VERSE ART</span>
-                    <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?auto=format&fit=crop&w=600&q=80" alt="창백한 푸른 점 에디션">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbtMt5f%2FdJMcadb0snH%2FAAAAAAAAAAAAAAAAAAAAAOxrorYh0kGgz3pC4psX-QzQ2kwSSok3LpzmV1Br4zOd%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DBUZOTo6bUFKJ%252BhQrP8z94Mb7AHk%253D" alt="동행 아트워크">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Merchandise 04</span>
-                    <h3 class="art-title">창백한 푸른 점 에디션</h3>
-                    <p class="art-desc">딥 네이비 컬러, 텐타/덤블 워싱 가공</p>
+                    <h3 class="art-title">동행 캘리그라피</h3>
+                    <p class="art-desc">검정 반팔 티셔츠 20수</p>
                 </div>
             </div>
 
             <!-- T-Shirt 5 -->
-            <div class="art-card" onclick="openModal('화이트 캘리그라피 미니멀 티 (White Minimal)', 'Official Merch #05', '깨끗한 화이트 원단 위에 붉은 전각 낙관과 절제된 서예 획으로 포인트를 준 미니멀 아트 티셔츠', 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" onclick="openModal('은하철도 999 연작', 'Official Merch #05', '검정 반팔 티셔츠 20수. 은하철도 999 회화 연작 티셔츠', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcsSUpO%2FdJMcaafq0hI%2FAAAAAAAAAAAAAAAAAAAAAOCnFgQ9HLIEATddBvGpjKoioz7wq-kfijxNaCf7hViA%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dw%252BQb%252F0w39JoRcmEVIwsfr%252FphciM%253D')">
                 <div class="art-thumb">
-                    <span class="merch-badge">MINIMAL WHITE</span>
-                    <img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&w=600&q=80" alt="화이트 캘리그라피 미니멀 티">
+                    <span class="merch-badge">LIMITED</span>
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F7Bw1S%2FdJMcagGK6Qd%2FAAAAAAAAAAAAAAAAAAAAAMVDp4ebZn4wt2o4AFTNtCAdQKrPAf_fzHp0HWoF7qmn%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dgank1RGWObhX2Qr572nsn%252BTnrQU%253D" alt="은하철도 999">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Merchandise 05</span>
-                    <h3 class="art-title">화이트 캘리 미니멀 티</h3>
-                    <p class="art-desc">순백색 프리미엄 코튼, 붉은 낙관 포인트</p>
+                    <h3 class="art-title">은하철도 999 연작</h3>
+                    <p class="art-desc">검정 반팔 티셔츠 20수</p>
                 </div>
             </div>
 
             <!-- T-Shirt 6 -->
-            <div class="art-card" onclick="openModal('아티스트 시그니처 롱슬리브 (Long Sleeve)', 'Official Merch #06', '양쪽 소매를 따라 흐르는 한글 캘리그라피 문장과 가슴 포켓 로고가 돋보이는 롱슬리브', 'https://images.unsplash.com/photo-1622445268121-ac11f17a4591?auto=format&fit=crop&w=1200&q=80')">
+            <div class="art-card" onclick="openModal('퍼포먼스 아트워크', 'Official Merch #06', '검정 반팔 티셔츠 20수. 퍼포먼스 LA 2026 아트워크 프린팅', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbrQZCz%2FdJMcafVmdBx%2FAAAAAAAAAAAAAAAAAAAAAAWxrkn42taMifCc3EnWPtriJhkn5u6U-2KDUAVOx8DK%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DegNRgJxzO2OX9QOg7SwiFm4JSvA%253D')">
                 <div class="art-thumb">
-                    <span class="merch-badge">LONG SLEEVE</span>
-                    <img src="https://images.unsplash.com/photo-1622445268121-ac11f17a4591?auto=format&fit=crop&w=600&q=80" alt="아티스트 시그니처 롱슬리브">
+                    <span class="merch-badge">SIGNATURE</span>
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbPVc6H%2FdJMcadwhMSJ%2FAAAAAAAAAAAAAAAAAAAAAD32J3DuWCdx6yEgE09Drjoi00kejZeQTj9FjsBP_i7i%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dwy%252B2bRge7q%252BdOqYunq%252B3BFjkZoI%253D" alt="퍼포먼스 아트워크">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Merchandise 06</span>
-                    <h3 class="art-title">시그니처 롱슬리브</h3>
-                    <p class="art-desc">소매 타이포그래피, 가을/겨울 시즌 에디션</p>
+                    <h3 class="art-title">퍼포먼스 아트워크</h3>
+                    <p class="art-desc">검정 반팔 티셔츠 20수</p>
                 </div>
             </div>
         </div>
@@ -1199,7 +1222,7 @@
 
         <div class="info-map-wrapper">
             <div class="info-details">
-                <h3 style="font-size: 1.5rem; color: #fff; margin-bottom: 15px;">EK Gallery</h3>
+                <h3 style="font-size: 1.5rem; font-weight: 400; color: #fff; margin-bottom: 15px;">EK Gallery</h3>
                 
                 <ul class="info-list">
                     <li>
