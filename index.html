@@ -115,7 +115,6 @@
             overflow: hidden;
         }
 
-        /* 상단 공식 배너 이미지 래퍼 */
         .banner-container {
             width: 100%;
             max-width: 1200px;
@@ -220,31 +219,95 @@
             background: var(--stamp-red);
         }
 
-        /* ---------------- Poetry & Performance ---------------- */
+        /* ---------------- Poetry & Performance (별빛 & 엔딩 크레딧 최적화) ---------------- */
         .concept-container {
+            position: relative;
             display: grid;
             grid-template-columns: 1.1fr 0.9fr;
             gap: 40px;
-            background: #0b1526;
+            background: radial-gradient(circle at 60% 40%, #11233d 0%, #081120 70%, #050b14 100%);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            padding: 35px 30px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.6);
             align-items: center;
+            overflow: hidden;
         }
 
+        /* 배경 별빛 반짝임 효과 */
+        .concept-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(1.5px 1.5px at 40px 60px, rgba(255,255,255,0.9), rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 120px 180px, var(--text-teal), rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 220px 80px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2.5px 2.5px at 340px 240px, var(--text-gold), rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 480px 130px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 600px 70px, var(--text-teal), rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 720px 210px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 850px 140px, rgba(255,255,255,0.85), rgba(0,0,0,0));
+            background-size: 550px 350px;
+            pointer-events: none;
+            opacity: 0.55;
+            animation: twinkleStars 5s infinite alternate ease-in-out;
+            z-index: 1;
+        }
+
+        @keyframes twinkleStars {
+            0% { opacity: 0.3; transform: scale(0.99); }
+            50% { opacity: 0.75; }
+            100% { opacity: 0.4; transform: scale(1.01); }
+        }
+
+        /* 시가 표시되는 뷰포트 (상단 20% 페이드아웃 마스크) */
+        .poem-viewport {
+            position: relative;
+            height: 380px;
+            overflow: hidden;
+            border-left: 2px solid var(--text-teal);
+            padding-left: 22px;
+            z-index: 2;
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 8%, black 20%, black 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 8%, black 20%, black 100%);
+        }
+
+        /* [요청 반영] 딜레이 없이 빨간 선 지점부터 즉시 시작 & 20% 더 느려진 34초 속도 */
         .poem-text {
             font-family: var(--font-sans);
-            font-size: 1.05rem;
-            line-height: 2.1;
-            color: #c7d2de;
+            font-size: 1.03rem;
+            line-height: 2.2;
+            color: #d1dce7;
             white-space: pre-line;
-            border-left: 2px solid var(--text-teal);
-            padding-left: 20px;
+            animation: pcCreditScroll 34s linear infinite; /* 20% 느리게 (기존 28s -> 34s) */
+        }
+
+        /* 마우스 호버 시 일시 정지 */
+        .poem-viewport:hover .poem-text {
+            animation-play-state: paused;
+        }
+
+        /* 데스크톱: 빨간 선 위치(중하단)에서 텍스트가 즉시 노출된 채로 스크롤 시작 */
+        @keyframes pcCreditScroll {
+            0% {
+                transform: translateY(18%); /* 첨부 이미지의 빨간 선 위치에서 첫 문장이 바로 보임 */
+                opacity: 1;
+            }
+            85% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
         }
 
         .poem-signature {
-            margin-top: 20px;
+            margin-top: 25px;
             display: flex;
             align-items: center;
             gap: 12px;
@@ -252,20 +315,15 @@
             color: #fff;
         }
 
-        .stamp-badge {
-            background: var(--stamp-red);
-            color: #fff;
-            padding: 2px 8px;
-            font-size: 0.8rem;
-            border-radius: 3px;
-        }
-
         .performance-card {
-            background: rgba(255,255,255,0.03);
+            position: relative;
+            background: rgba(255,255,255,0.035);
             border: 1px solid rgba(56, 182, 211, 0.25);
             border-radius: 10px;
-            padding: 15px 10px;
+            padding: 20px 15px;
             text-align: center;
+            z-index: 2;
+            backdrop-filter: blur(4px);
         }
 
         .performance-card h3 {
@@ -667,7 +725,7 @@
             display: none;
         }
 
-        /* ---------------- Responsive ---------------- */
+        /* ---------------- Responsive (모바일 전용 시작 위치 & 속도) ---------------- */
         @media (max-width: 900px) {
             .mobile-br {
                 display: block;
@@ -685,6 +743,36 @@
             nav {
                 display: none;
             }
+            
+            .poem-viewport {
+                height: 330px;
+                padding-left: 16px;
+                overflow: hidden;
+                -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 8%, black 20%, black 100%);
+                mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 8%, black 20%, black 100%);
+            }
+
+            /* [모바일] performance-card 바로 위에서 즉시 시작 & 20% 느린 32초 속도 */
+            .poem-text {
+                font-size: 0.9rem;
+                line-height: 1.95;
+                animation: mobileCreditScroll 32s linear infinite; /* 20% 느리게 */
+            }
+
+            @keyframes mobileCreditScroll {
+                0% {
+                    transform: translateY(12%); /* 모바일: performance-card 바로 위 라인에서 즉시 노출 */
+                    opacity: 1;
+                }
+                85% {
+                    opacity: 1;
+                }
+                100% {
+                    transform: translateY(-100%);
+                    opacity: 0;
+                }
+            }
+
             /* 모바일: 작품 2열 배치 */
             .art-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -705,10 +793,6 @@
             .art-tag {
                 font-size: 0.65rem;
             }
-            .poem-text {
-                font-size: 0.84rem;
-                line-height: 1.68;
-            }
         }
         
     </style>
@@ -719,21 +803,19 @@
     <header>
         <a href="#" class="logo">
             <span style="display:inline-block;width:104px;height:76.8px;vertical-align:middle;background:url('https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fbffejw%2FdJMcaiExnKS%2FAAAAAAAAAAAAAAAAAAAAAJ5MdlDFtUbrCCPkTf49xFhntkMfLt_U75Ghy2of7GDN%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DwEnyo%252F8krmLHzo6zkohqnUWDWSw%253D') no-repeat center/contain;"></span>
-            <!-- <span class="seal-point">별</span>  -->
             NORMAN MYUNG
         </a>
         <nav>
             <a href="#about">EXHIBITION</a>
-            <a href="#gallery">WORKS (20)</a>
+            <a href="#gallery">WORKS (30)</a>
             <a href="#merch">T-SHIRTS (6)</a>
             <a href="#performance">PERFORMANCE</a>
             <a href="#location">LOCATION</a>
         </nav>
     </header>
 
-    <!-- Hero Section (제공해주신 배너 아트워크 적용) -->
+    <!-- Hero Section -->
     <section class="hero">
-        <!-- 메인 배너 이미지 영역 -->
         <div class="banner-container">
             <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FVkNAj%2FdJMcaiEvOLc%2FAAAAAAAAAAAAAAAAAAAAALuLoGSWBS4p19MnO2Y8bdJr4puR4VV1gIOSh-NmyNm3%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DrtLLK3kGushN3axwdujgECtVWz4%253D" alt="우리는 별에서 왔습니다 - NORMAN MYUNG 전시 메인 배너" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1600&q=80';">
         </div>
@@ -743,18 +825,6 @@
                 "The canvas dreams in verse; The verse paints in soul."<br>
                 <span style="font-size: 0.92rem; color: var(--text-teal);">A place where poetry and Art Meet</span>
             </div>
-
-            <!-- <div class="hero-schedule-pills">
-                <div class="pill-badge">
-                    <i class="fa-regular fa-calendar"></i> Sep 19 — Sep 25, 2026 (11:00 AM — 5:00 PM)
-                </div>
-                <div class="pill-badge highlight">
-                    <i class="fa-solid fa-champagne-glasses"></i> Opening Reception: Sep 19, 3:00 PM
-                </div>
-                <div class="pill-badge">
-                    <i class="fa-solid fa-location-dot"></i> EK Gallery, Los Angeles
-                </div>
-            </div> -->
         </div>
     </section>
 
@@ -766,7 +836,9 @@
         </div>
 
         <div class="concept-container">
-            <div class="poem-text">
+            <!-- [엔딩 크레딧 뷰포트 - 빨간 선 위치에서 즉시 시작] -->
+            <div class="poem-viewport">
+                <div class="poem-text">
 보이저 위성이
 60억 킬로미터 떨어진 곳에서 촬영한
 ‘창백한 푸른 점’
@@ -795,8 +867,8 @@
 
 <div class="poem-signature">
     <img width="100%" src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fb3cHpv%2FdJMcadpCORZ%2FAAAAAAAAAAAAAAAAAAAAACPqWqk7Hya8B6UfEOB8CaTHXp1ztHvZsw3Z4XaiARCb%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DJuAZ%252F4HTZYvfBNOKhYlTBO5kHjA%253D">
-    <!-- <span class="stamp-badge">달빛</span> 달빛사냥꾼 (Moon Light Hunter) -->
 </div>
+                </div>
             </div>
             
             <div class="performance-card" id="performance">
@@ -815,34 +887,24 @@
         </div>
     </section>
 
-    <!-- Gallery Section (그림 10 + 글씨 10 = 총 20점) -->
+    <!-- Gallery Section (그림 15 + 글씨 15 = 총 30점) -->
     <section id="gallery">
         <div class="section-header">
-            <span class="section-tag">Selected Works (Total 20)</span>
+            <span class="section-tag">Selected Works (Total 30)</span>
             <h2 class="section-title">전시 작품 갤러리</h2>
         </div>
 
-        <!-- 탭 필터 (전체 / 그림 10 / 글씨 10) -->
+        <!-- 탭 필터 -->
         <div class="gallery-nav">
             <button class="tab-btn active" onclick="filterGallery('all', this)">전체 작품 (All 30)</button>
             <button class="tab-btn" onclick="filterGallery('painting', this)">그림 (Painting 15)</button>
             <button class="tab-btn" onclick="filterGallery('calligraphy', this)">글씨 (Calligraphy 15)</button>
         </div>
 
-        <!-- 외부 링크 버튼 구분 -->
-        <!-- <div class="external-links-row">
-            <a href="https://www.instagram.com" target="_blank" class="btn-external">
-                <i class="fa-solid fa-palette"></i> 그림(Painting) 전체 아카이브 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.75rem;"></i>
-            </a>
-            <a href="https://www.instagram.com" target="_blank" class="btn-external">
-                <i class="fa-solid fa-pen-nib"></i> 캘리그라피(Calligraphy) 외부링크 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.75rem;"></i>
-            </a>
-        </div> -->
-
-        <!-- Gallery Grid (20 Works) -->
+        <!-- Gallery Grid (30 Works) -->
         <div class="art-grid" id="artGrid">
             
-            <!-- ===== [PAINTING 1~10] ===== -->
+            <!-- ===== [PAINTING 1~15] ===== -->
             <!-- Painting 1 -->
             <div class="art-card" data-category="painting" onclick="openModal('밤에 피는 해바라기', 'Painting', '우주적 시공간 속에서 피어난 해바라기와 달빛의 순환', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbcW68l%2FdJMcaf8JUf9%2FAAAAAAAAAAAAAAAAAAAAADG4oObcppWDU0c6N_LX9_jnprnHeVQv8_sUcxJrKcFs%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D%252FgRhcxVt%252FdBy2el5SB%252F2pYG7U8U%253D')">
                 <div class="art-thumb">
@@ -959,6 +1021,7 @@
                     <p class="art-desc">한지에 아크릴 및 먹</p>
                 </div>
             </div>
+
             <!-- Painting 10 -->
             <div class="art-card" data-category="painting" onclick="openModal('서해 (西海)', 'Painting', '밀물에 차오른 서해 포구 위 새들의 힘찬 날갯짓', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fc0EDXD%2FdJMcabMfdI3%2FAAAAAAAAAAAAAAAAAAAAAH1d5sHuWUnkWaA2Kf7qa0CeP47SekqLfD_3A3Ki8v5X%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DFI1%252FDiY%252Bf2rm%252B9ho1muY%252B2Co0XM%253D')">
                 <div class="art-thumb">
@@ -1027,7 +1090,7 @@
             <!-- Painting 15 -->
             <div class="art-card" data-category="painting" onclick="openModal('달빛 사냥꾼(The Moonlight Hunter)', 'Painting', '달빛을 쫓는 낭만과 예술적 사유를 표현', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcUIuQq%2FdJMcajchWlI%2FAAAAAAAAAAAAAAAAAAAAAHniiktIjmyODBGHXt85gykKYDBvkMW9lqLd5ib9dzN_%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D2g33TtuV4nAvkO8Fg0zA9Xg47iE%253D')">
                 <div class="art-thumb">
-                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcUIuQq%2FdJMcajchWlI%2FAAAAAAAAAAAAAAAAAAAAAHniiktIjmyODBGHXt85gykKYDBvkMW9lqLd5ib9dzN_%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D2g33TtuV4nAvkO8Fg0zA9Xg47iE%253D alt="달빛 사냥꾼">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcUIuQq%2FdJMcajchWlI%2FAAAAAAAAAAAAAAAAAAAAAHniiktIjmyODBGHXt85gykKYDBvkMW9lqLd5ib9dzN_%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D2g33TtuV4nAvkO8Fg0zA9Xg47iE%253D" alt="달빛 사냥꾼">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
@@ -1041,17 +1104,7 @@
             </div>
 
 
-
-
-
-
-
-
-
-
-
-
-            <!-- ===== [CALLIGRAPHY 1~10] ===== -->
+            <!-- ===== [CALLIGRAPHY 1~15] ===== -->
             <!-- Calligraphy 1 -->
             <div class="art-card" data-category="calligraphy" onclick="openModal('우리는 별에서 왔습니다', 'Calligraphy', '한글 캘리그라피의 율동감과 붉은 전각이 어우러진 전시회 메인 타이틀', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcuFJM4%2FdJMb99Od5zw%2FAAAAAAAAAAAAAAAAAAAAAC8PhA6XzgJb8Diw3FaoWS7AqfpdRLMLIrK2KHKGaGRh%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Di0nvhup1e5hWyPdURYv2UaksHSs%253D')">
                 <div class="art-thumb">
@@ -1090,7 +1143,6 @@
                         광야
                         <span style="font-size: 90%; letter-spacing: -0.02em;">(The Wilderness of Hope)</span>
                     </h3>      
-            
                     <p class="art-desc">전통 한지와 먹</p>
                 </div>
             </div>
@@ -1188,8 +1240,6 @@
                         }
                     }
                     </style>
-          
-     
                     <p class="art-desc">한지, 서화합일</p>
                 </div>
             </div>
@@ -1207,8 +1257,8 @@
                 </div>
             </div>
 
-               <!-- Calligraphy 11 -->
-               <div class="art-card" data-category="calligraphy" onclick="openModal('무소의 뿔처럼 혼자서 가라', 'Calligraphy', '고독에 흔들리지 않고 묵묵히 걷는 삶 표현', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fd4czDj%2FdJMcadJTDnK%2FAAAAAAAAAAAAAAAAAAAAABxHBB-KK9-3Loq8vd7mJSKWw2kjl2m4rVea8ESd_cxH%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D5W%252BnQPI%252Bnhj5d8vCt3C%252BHmiqCrQ%253D')">
+            <!-- Calligraphy 11 -->
+            <div class="art-card" data-category="calligraphy" onclick="openModal('무소의 뿔처럼 혼자서 가라', 'Calligraphy', '고독에 흔들리지 않고 묵묵히 걷는 삶 표현', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fd4czDj%2FdJMcadJTDnK%2FAAAAAAAAAAAAAAAAAAAAABxHBB-KK9-3Loq8vd7mJSKWw2kjl2m4rVea8ESd_cxH%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D5W%252BnQPI%252Bnhj5d8vCt3C%252BHmiqCrQ%253D')">
                 <div class="art-thumb">
                     <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fd4czDj%2FdJMcadJTDnK%2FAAAAAAAAAAAAAAAAAAAAABxHBB-KK9-3Loq8vd7mJSKWw2kjl2m4rVea8ESd_cxH%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D5W%252BnQPI%252Bnhj5d8vCt3C%252BHmiqCrQ%253D" alt="무소의 뿔처럼 혼자서 가라">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
@@ -1220,8 +1270,8 @@
                 </div>
             </div>
 
-             <!-- Calligraphy 12 -->
-             <div class="art-card" data-category="calligraphy" onclick="openModal('청산(靑山)은 나를 보고', 'Calligraphy', ' 자연을 닮아 담담하게 살아가는 달관 표현', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbP2s0t%2FdJMcadwjHwd%2FAAAAAAAAAAAAAAAAAAAAAMXbX4Flp84piYwYtmP-Z-wY6f9QXMoWelecDJ0z7LCi%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DOkdrZXGocUmMsbAGLXpJTfgdqRY%253D')">
+            <!-- Calligraphy 12 -->
+            <div class="art-card" data-category="calligraphy" onclick="openModal('청산(靑山)은 나를 보고', 'Calligraphy', ' 자연을 닮아 담담하게 살아가는 달관 표현', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbP2s0t%2FdJMcadwjHwd%2FAAAAAAAAAAAAAAAAAAAAAMXbX4Flp84piYwYtmP-Z-wY6f9QXMoWelecDJ0z7LCi%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DOkdrZXGocUmMsbAGLXpJTfgdqRY%253D')">
                 <div class="art-thumb">
                     <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbP2s0t%2FdJMcadwjHwd%2FAAAAAAAAAAAAAAAAAAAAAMXbX4Flp84piYwYtmP-Z-wY6f9QXMoWelecDJ0z7LCi%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DOkdrZXGocUmMsbAGLXpJTfgdqRY%253D" alt="청산(靑山)은 나를 보고">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
@@ -1233,44 +1283,44 @@
                 </div>
             </div>
 
-                <!-- Calligraphy 13 -->
-                <div class="art-card" data-category="calligraphy" onclick="openModal('귀향 (The Way Home)', 'Calligraphy', ' 자연을 닮아 담담하게 살아가는 달관 표현', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbfNdST%2FdJMcadJTDnG%2FAAAAAAAAAAAAAAAAAAAAADO0TSHGK545eNNkvEsY7c7lZt2TWnqOwcYMFQHRX2Ck%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DhhmU1oAeE4DmTGNuVYXyySHW8Yg%253D')">
-                    <div class="art-thumb">
-                        <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbfNdST%2FdJMcadJTDnG%2FAAAAAAAAAAAAAAAAAAAAADO0TSHGK545eNNkvEsY7c7lZt2TWnqOwcYMFQHRX2Ck%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DhhmU1oAeE4DmTGNuVYXyySHW8Yg%253D" alt="귀향">
-                        <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
-                    </div>
-                    <div class="art-info">
-                        <span class="art-tag">Calligraphy #13</span>
-                        <h3 class="art-title">귀향 (The Way Home)</h3>
-                        <p class="art-desc">한지,먹과 혼합매체</p>
-                    </div>
+            <!-- Calligraphy 13 -->
+            <div class="art-card" data-category="calligraphy" onclick="openModal('귀향 (The Way Home)', 'Calligraphy', ' 자연을 닮아 담담하게 살아가는 달관 표현', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbfNdST%2FdJMcadJTDnG%2FAAAAAAAAAAAAAAAAAAAAADO0TSHGK545eNNkvEsY7c7lZt2TWnqOwcYMFQHRX2Ck%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DhhmU1oAeE4DmTGNuVYXyySHW8Yg%253D')">
+                <div class="art-thumb">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbfNdST%2FdJMcadJTDnG%2FAAAAAAAAAAAAAAAAAAAAADO0TSHGK545eNNkvEsY7c7lZt2TWnqOwcYMFQHRX2Ck%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DhhmU1oAeE4DmTGNuVYXyySHW8Yg%253D" alt="귀향">
+                    <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
+                <div class="art-info">
+                    <span class="art-tag">Calligraphy #13</span>
+                    <h3 class="art-title">귀향 (The Way Home)</h3>
+                    <p class="art-desc">한지,먹과 혼합매체</p>
+                </div>
+            </div>
 
-                <!-- Calligraphy 14 -->
-                <div class="art-card" data-category="calligraphy" onclick="openModal('심해 (Deep Sea)', 'Calligraphy', ' 자연을 닮아 담담하게 살아가는 달관 표현', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcEFA4l%2FdJMcabedDJQ%2FAAAAAAAAAAAAAAAAAAAAAEDKxf2M2sOOAw_XFBiYwcR8Lx9J86Bmkc1cpK9vMTqn%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DXs0yFljQDjb8vQvTBCoo5nGVSTk%253D')">
-                    <div class="art-thumb">
-                        <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcEFA4l%2FdJMcabedDJQ%2FAAAAAAAAAAAAAAAAAAAAAEDKxf2M2sOOAw_XFBiYwcR8Lx9J86Bmkc1cpK9vMTqn%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DXs0yFljQDjb8vQvTBCoo5nGVSTk%253D" alt="심해">
-                        <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
-                    </div>
-                    <div class="art-info">
-                        <span class="art-tag">Calligraphy #14</span>
-                        <h3 class="art-title">심해 (Deep Sea)</h3>
-                        <p class="art-desc">한지,먹</p>
-                    </div>
+            <!-- Calligraphy 14 -->
+            <div class="art-card" data-category="calligraphy" onclick="openModal('심해 (Deep Sea)', 'Calligraphy', ' 자연을 닮아 담담하게 살아가는 달관 표현', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcEFA4l%2FdJMcabedDJQ%2FAAAAAAAAAAAAAAAAAAAAAEDKxf2M2sOOAw_XFBiYwcR8Lx9J86Bmkc1cpK9vMTqn%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DXs0yFljQDjb8vQvTBCoo5nGVSTk%253D')">
+                <div class="art-thumb">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcEFA4l%2FdJMcabedDJQ%2FAAAAAAAAAAAAAAAAAAAAAEDKxf2M2sOOAw_XFBiYwcR8Lx9J86Bmkc1cpK9vMTqn%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DXs0yFljQDjb8vQvTBCoo5nGVSTk%253D" alt="심해">
+                    <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
+                <div class="art-info">
+                    <span class="art-tag">Calligraphy #14</span>
+                    <h3 class="art-title">심해 (Deep Sea)</h3>
+                    <p class="art-desc">한지,먹</p>
+                </div>
+            </div>
 
-                 <!-- Calligraphy 15 -->
-                 <div class="art-card" data-category="calligraphy" onclick="openModal('별과 같은 사람', 'Calligraphy', ' 누군가의 마음을 비추는 별이 되려는 염원 표현', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FceYciC%2FdJMcaaGzW7a%2FAAAAAAAAAAAAAAAAAAAAAMeCr-20wgc_qbdOep10stF4BYM0t5tg9BQIGVl9DSF4%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DodNSMvb%252FVdyI0X2wa93Z0glk0nc%253D')">
-                    <div class="art-thumb">
-                        <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FceYciC%2FdJMcaaGzW7a%2FAAAAAAAAAAAAAAAAAAAAAMeCr-20wgc_qbdOep10stF4BYM0t5tg9BQIGVl9DSF4%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DodNSMvb%252FVdyI0X2wa93Z0glk0nc%253D" alt="별과 같은 사람">
-                        <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
-                    </div>
-                    <div class="art-info">
-                        <span class="art-tag">Calligraphy #15</span>
-                        <h3 class="art-title">별과 같은 사람</h3>
-                        <p class="art-desc">한지,먹</p>
-                    </div>
+            <!-- Calligraphy 15 -->
+            <div class="art-card" data-category="calligraphy" onclick="openModal('별과 같은 사람', 'Calligraphy', ' 누군가의 마음을 비추는 별이 되려는 염원 표현', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FceYciC%2FdJMcaaGzW7a%2FAAAAAAAAAAAAAAAAAAAAAMeCr-20wgc_qbdOep10stF4BYM0t5tg9BQIGVl9DSF4%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DodNSMvb%252FVdyI0X2wa93Z0glk0nc%253D')">
+                <div class="art-thumb">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FceYciC%2FdJMcaaGzW7a%2FAAAAAAAAAAAAAAAAAAAAAMeCr-20wgc_qbdOep10stF4BYM0t5tg9BQIGVl9DSF4%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DodNSMvb%252FVdyI0X2wa93Z0glk0nc%253D" alt="별과 같은 사람">
+                    <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
+                <div class="art-info">
+                    <span class="art-tag">Calligraphy #15</span>
+                    <h3 class="art-title">별과 같은 사람</h3>
+                    <p class="art-desc">한지,먹</p>
+                </div>
+            </div>
 
         </div>
     </section>
@@ -1343,15 +1393,15 @@
             </div>
 
             <!-- T-Shirt 5 -->
-            <div class="art-card" onclick="openModal('안드로메다 은하여행 연작', 'Official Merch #05', '검정 반팔 티셔츠 20수. 안드로메다 은하여행 연작 티셔츠', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcsSUpO%2FdJMcaafq0hI%2FAAAAAAAAAAAAAAAAAAAAAOCnFgQ9HLIEATddBvGpjKoioz7wq-kfijxNaCf7hViA%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dw%252BQb%252F0w39JoRcmEVIwsfr%252FphciM%253D')">
+            <div class="art-card" onclick="openModal('은하철도 999 연작', 'Official Merch #05', '검정 반팔 티셔츠 20수. 은하철도 999 회화 연작 티셔츠', 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcsSUpO%2FdJMcaafq0hI%2FAAAAAAAAAAAAAAAAAAAAAOCnFgQ9HLIEATddBvGpjKoioz7wq-kfijxNaCf7hViA%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dw%252BQb%252F0w39JoRcmEVIwsfr%252FphciM%253D')">
                 <div class="art-thumb">
                     <span class="merch-badge">LIMITED</span>
-                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F7Bw1S%2FdJMcagGK6Qd%2FAAAAAAAAAAAAAAAAAAAAAMVDp4ebZn4wt2o4AFTNtCAdQKrPAf_fzHp0HWoF7qmn%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dgank1RGWObhX2Qr572nsn%252BTnrQU%253D" alt="은하여행행">
+                    <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F7Bw1S%2FdJMcagGK6Qd%2FAAAAAAAAAAAAAAAAAAAAAMVDp4ebZn4wt2o4AFTNtCAdQKrPAf_fzHp0HWoF7qmn%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dgank1RGWObhX2Qr572nsn%252BTnrQU%253D" alt="은하철도 999">
                     <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
                 </div>
                 <div class="art-info">
                     <span class="art-tag">Merchandise 05</span>
-                    <h3 class="art-title">안드로메다 은하여행 연작</h3>
+                    <h3 class="art-title">은하철도 999 연작</h3>
                     <p class="art-desc">검정 반팔 티셔츠 20수</p>
                 </div>
             </div>
@@ -1456,7 +1506,7 @@
 
     <!-- JavaScript Interactions -->
     <script>
-        // 갤러리 필터링 (전체 / 그림 10 / 글씨 10)
+        // 갤러리 필터링 (전체 / 그림 15 / 글씨 15)
         function filterGallery(category, btnElement) {
             const cards = document.querySelectorAll('#artGrid .art-card');
             const buttons = document.querySelectorAll('.gallery-nav .tab-btn');
