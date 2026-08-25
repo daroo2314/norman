@@ -219,7 +219,7 @@
             background: var(--stamp-red);
         }
 
-        /* ---------------- Poetry & Performance (별빛 & 엔딩 크레딧 최적화) ---------------- */
+        /* ---------------- Poetry & Performance (별빛 & 무한 롤링 엔딩 크레딧) ---------------- */
         .concept-container {
             position: relative;
             display: grid;
@@ -272,29 +272,25 @@
             border-left: 2px solid var(--text-teal);
             padding-left: 22px;
             z-index: 2;
+            pointer-events: none; /* 클릭/터치로 인한 방해 없이 항상 부드럽게 흐름 유지 */
             -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 8%, black 20%, black 100%);
             mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 8%, black 20%, black 100%);
         }
 
-        /* [요청 반영] 딜레이 없이 빨간 선 지점부터 즉시 시작 & 20% 더 느려진 34초 속도 */
+        /* 멈춤 없이 무한 반복(infinite loop)되는 34초 스크롤 */
         .poem-text {
             font-family: var(--font-sans);
             font-size: 1.03rem;
             line-height: 2.2;
             color: #d1dce7;
             white-space: pre-line;
-            animation: pcCreditScroll 34s linear infinite; /* 20% 느리게 (기존 28s -> 34s) */
+            animation: pcCreditScroll 34s linear infinite;
         }
 
-        /* 마우스 호버 시 일시 정지 */
-        .poem-viewport:hover .poem-text {
-            animation-play-state: paused;
-        }
-
-        /* 데스크톱: 빨간 선 위치(중하단)에서 텍스트가 즉시 노출된 채로 스크롤 시작 */
+        /* 데스크톱: 빨간 선 위치(중하단)에서 텍스트 노출 시작 -> 위로 이동 -> 무한 반복 */
         @keyframes pcCreditScroll {
             0% {
-                transform: translateY(18%); /* 첨부 이미지의 빨간 선 위치에서 첫 문장이 바로 보임 */
+                transform: translateY(18%);
                 opacity: 1;
             }
             85% {
@@ -725,7 +721,7 @@
             display: none;
         }
 
-        /* ---------------- Responsive (모바일 전용 시작 위치 & 속도) ---------------- */
+        /* ---------------- Responsive (모바일 무한 롤링) ---------------- */
         @media (max-width: 900px) {
             .mobile-br {
                 display: block;
@@ -748,20 +744,21 @@
                 height: 330px;
                 padding-left: 16px;
                 overflow: hidden;
+                pointer-events: none;
                 -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 8%, black 20%, black 100%);
                 mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 8%, black 20%, black 100%);
             }
 
-            /* [모바일] performance-card 바로 위에서 즉시 시작 & 20% 느린 32초 속도 */
+            /* 모바일: 멈춤 없는 무한 반복 스크롤 */
             .poem-text {
                 font-size: 0.9rem;
                 line-height: 1.95;
-                animation: mobileCreditScroll 32s linear infinite; /* 20% 느리게 */
+                animation: mobileCreditScroll 28s linear infinite;
             }
 
             @keyframes mobileCreditScroll {
                 0% {
-                    transform: translateY(12%); /* 모바일: performance-card 바로 위 라인에서 즉시 노출 */
+                    transform: translateY(12%);
                     opacity: 1;
                 }
                 85% {
@@ -836,7 +833,7 @@
         </div>
 
         <div class="concept-container">
-            <!-- [엔딩 크레딧 뷰포트 - 빨간 선 위치에서 즉시 시작] -->
+            <!-- [엔딩 크레딧 뷰포트 - 멈춤 없이 무한 반복] -->
             <div class="poem-viewport">
                 <div class="poem-text">
 보이저 위성이
