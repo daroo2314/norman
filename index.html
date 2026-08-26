@@ -341,13 +341,17 @@
             mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 8%, black 20%, black 100%);
         }
 
+        /* [요청 반영] 조금 더 얇고 정갈한 서체 굵기(300) 적용 */
         .poem-text {
             font-family: var(--font-sans);
             font-size: 1.05rem;
+            font-weight: 300; /* 서정적이고 얇은 폰트 굵기 */
             line-height: 2.2;
             color: #e0eaf3;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.6); /* 텍스트 섀도우를 은은하게 다듬어 얇은 느낌 강조 */
             white-space: pre-line;
+            word-break: break-word;
+            overflow-wrap: break-word;
             will-change: transform;
             animation: pcCreditScroll 36s linear infinite 1.5s;
             animation-fill-mode: both;
@@ -413,7 +417,7 @@
             line-height: 1.7;
         }
 
-        /* ---------------- Gallery Tabs (데스크톱 기본 스타일) ---------------- */
+        /* ---------------- Gallery Tabs ---------------- */
         .gallery-nav {
             display: flex;
             justify-content: center;
@@ -842,7 +846,7 @@
             display: none;
         }
 
-        /* ---------------- Responsive & 모바일 2줄 탭 정렬 최적화 ---------------- */
+        /* ---------------- Responsive (모바일 900px 이하) ---------------- */
         @media (max-width: 900px) {
             .mobile-br {
                 display: block;
@@ -882,6 +886,7 @@
 
             .poem-text {
                 font-size: 0.92rem;
+                font-weight: 300;
                 line-height: 2.05;
                 will-change: transform;
                 animation: mobileCreditScroll 34s linear infinite 1.5s;
@@ -902,7 +907,7 @@
                 }
             }
 
-            /* [요청 반영] 모바일 갤러리 탭: 2줄 정렬 (윗줄: All 전체 폭 100% / 아랫줄: 그림 50% + 글씨 50%) */
+            /* 모바일 갤러리 탭: 2줄 정렬 */
             .gallery-nav {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
@@ -922,14 +927,13 @@
                 white-space: nowrap;
             }
 
-            /* 1번째 버튼(All 전체 작품)을 윗줄 전체(2열 차지)로 확장 */
             .gallery-nav .tab-btn:first-child {
                 grid-column: 1 / -1;
                 padding: 12px 8px;
                 font-size: 0.92rem;
             }
 
-            /* 모바일 2열 카드 황금비율 */
+            /* 모바일 2열 카드 */
             .art-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
@@ -974,45 +978,78 @@
             }
         }
 
+        /* ---------------- 소형 아이폰(300~375px) 전용 ---------------- */
+        @media screen and (max-width: 480px) {
+            section {
+                padding: 30px 10px;
+            }
 
-      /* 기존에 추가했던 모바일 미디어 쿼리 코드를 완전히 지우고 이 코드로 교체하세요 */
+            .concept-container {
+                padding: 22px 10px;
+                gap: 20px;
+            }
+
+            .poem-viewport {
+                padding-left: 10px;
+                padding-right: 4px;
+                border-left-width: 2px;
+            }
+
+            .poem-text {
+                font-size: clamp(0.82rem, 3.8vw, 0.92rem) !important;
+                font-weight: 300 !important;
+                line-height: 1.95 !important;
+                letter-spacing: -0.025em !important;
+                word-break: break-word !important;
+                overflow-wrap: break-word !important;
+            }
+        }
+
+        @media screen and (max-width: 360px) {
+            section {
+                padding: 25px 8px;
+            }
+            .concept-container {
+                padding: 18px 8px;
+            }
+            .poem-viewport {
+                padding-left: 8px;
+            }
+            .poem-text {
+                font-size: 0.82rem !important;
+                font-weight: 300 !important;
+                line-height: 1.85 !important;
+                letter-spacing: -0.035em !important;
+            }
+            .section-title {
+                font-size: 1.6rem !important;
+            }
+        }
+
         @media screen and (max-width: 768px) {
-        .section-title {
-            display: block !important;
-            white-space: nowrap !important;     /* 강제 한 줄 유지 */
-            overflow: visible !important;
-            text-align: center !important;      /* 텍스트 가운데 정렬 */
-
-            /* 원래 가독성 좋은 크기로 복구 (rem 단위 또는 원하시는 크기로 변경 가능) */
-            font-size: 1.8rem !important;         
-            font-weight: 500 !important;        /* 원래 두께 유지 */
-            
-            /* 자간 압축 */
-            letter-spacing: -0.06em !important; 
-
-            /* [핵심 수정] 밑줄(::after)이 글자 바로 밑에 붙을 수 있도록 기준점 제공 */
-            position: relative !important;
-            transform: none !important;
-            width: 100% !important;
-            
-            /* 글자와 밑줄 사이의 간격을 띄워주는 여백 */
-            padding-bottom: 15px !important;    
-            
-            /* 양옆 10% 여백 부여 및 가로 중앙 정렬 */
-            padding-left: 10% !important;
-            padding-right: 10% !important;
-            box-sizing: border-box !important;  
-            margin: 0 auto !important;
+            .section-title {
+                display: block !important;
+                white-space: nowrap !important;
+                overflow: visible !important;
+                text-align: center !important;
+                font-size: 1.8rem !important;
+                font-weight: 500 !important;
+                letter-spacing: -0.06em !important;
+                position: relative !important;
+                transform: none !important;
+                width: 100% !important;
+                padding-bottom: 15px !important;
+                padding-left: 10% !important;
+                padding-right: 10% !important;
+                box-sizing: border-box !important;
+                margin: 0 auto !important;
+            }
+            .section-title::after {
+                bottom: 0 !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+            }
         }
-
-        /* 모바일 환경에서 밑줄 위치 미세 조정 */
-        .section-title::after {
-            bottom: 0 !important;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-        }
-        }
-
     </style>
 </head>
 <body>
@@ -1751,7 +1788,7 @@
             { category: 'Official Merch #02', title: '달빛사냥꾼 아트워크', desc: '검정 반팔 티셔츠 20수. 앞면: 전시회 메인 타이틀 / 뒷면: 달빛사냥꾼 캐릭터 아트워크', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FeiVsLS%2FdJMcadb0snJ%2FAAAAAAAAAAAAAAAAAAAAAPQao4fehAYcBCQH5lp2YHmMQtze0FFvIgsyasVo4w8p%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dca7y25yeXLQzLvTP%252FQeGDzUdH4Y%253D' },
             { category: 'Official Merch #03', title: '아버지 아트워크', desc: '검정 반팔 티셔츠 20수. 앞면: 전시회 메인 타이틀 / 뒷면: 아버지 캘리그라피 아트워크', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FvWADs%2FdJMcadb0snI%2FAAAAAAAAAAAAAAAAAAAAAJ7SMPm-FE1dEQnslDGCfdceSNyHN1n6143YkRphwlZL%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DmNZhLb7%252FLgZebzsq%252Ba78dW2COqU%253D' },
             { category: 'Official Merch #04', title: '동행 캘리그라피', desc: '검정 반팔 티셔츠 20수. 앞면: 전시회 메인 타이틀 / 뒷면: 동행 캘리그라피 아트워크 프린팅', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbtMt5f%2FdJMcadb0snH%2FAAAAAAAAAAAAAAAAAAAAAOxrorYh0kGgz3pC4psX-QzQ2kwSSok3LpzmV1Br4zOd%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DBUZOTo6bUFKJ%252BhQrP8z94Mb7AHk%253D' },
-            { category: 'Official Merch #05', title: '은하철도 999 연작', desc: '검정 반팔 티셔츠 20수. 은하철도 999 회화 연작 티셔츠', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F7Bw1S%2FdJMcagGK6Qd%2FAAAAAAAAAAAAAAAAAAAAAMVDp4ebZn4wt2o4AFTNtCAdQKrPAf_fzHp0HWoF7qmn%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dgank1RGWObhX2Qr572nsn%252BTnrQU%253D' },
+            { category: 'Official Merch #05', title: '안드로메다 은하여행 연작', desc: '검정 반팔 티셔츠 20수. 은하철도 999 회화 연작 티셔츠', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F7Bw1S%2FdJMcagGK6Qd%2FAAAAAAAAAAAAAAAAAAAAAMVDp4ebZn4wt2o4AFTNtCAdQKrPAf_fzHp0HWoF7qmn%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dgank1RGWObhX2Qr572nsn%252BTnrQU%253D' },
             { category: 'Official Merch #06', title: '퍼포먼스 아트워크', desc: '검정 반팔 티셔츠 20수. 퍼포먼스 LA 2026 아트워크 프린팅', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbPVc6H%2FdJMcadwhMSJ%2FAAAAAAAAAAAAAAAAAAAAAD32J3DuWCdx6yEgE09Drjoi00kejZeQTj9FjsBP_i7i%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dwy%252B2bRge7q%252BdOqYunq%252B3BFjkZoI%253D' }
         ];
 
