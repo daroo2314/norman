@@ -1907,6 +1907,31 @@
                 revealObserver.observe(el);
             });
         });
+
+        // 푸터 카피라이트 5회 연속 탭 시 관리자 진입
+        let adminTapCount = 0;
+        let adminTapTimer = null;
+        const footerCopy = document.querySelector('footer .footer-copy');
+        if (footerCopy) {
+            footerCopy.addEventListener('click', handleAdminSecretTrigger);
+            footerCopy.addEventListener('touchend', handleAdminSecretTrigger);
+        }
+        function handleAdminSecretTrigger() {
+            adminTapCount++;
+            clearTimeout(adminTapTimer);
+            adminTapTimer = setTimeout(() => { adminTapCount = 0; }, 2000);
+            if (adminTapCount >= 5) {
+                adminTapCount = 0;
+                const pass = prompt("관리자 암호를 입력하세요:");
+                if (pass === "1630" || pass === "admin") {
+                    window.location.href = "admin.html";
+                } else if (pass !== null) {
+                    alert("비밀번호가 일치하지 않습니다.");
+                }
+            }
+        }
     </script>
+
+   
 </body>
 </html>
