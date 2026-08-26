@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전시회 콘텐츠 관리자 시스템 | EXHIBITION CMS</title>
+    
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-main: #0a0f18;
+            --bg-sidebar: #060a10;
+            --bg-card: #101826;
+            --bg-input: #0b111c;
+            --text-teal: #38b6d3;
+            --text-gold: #e2c079;
+            --stamp-red: #c93b2b;
+            --text-light: #f0f3f6;
+            --text-muted: #8896a6;
+            --border-color: rgba(255, 255, 255, 0.12);
+            --border-focus: #38b6d3;
+            --font-base: 'Montserrat', 'Noto Sans KR', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-base);
+            background-color: var(--bg-main);
+            color: var(--text-light);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        aside {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .sidebar-header { padding: 22px 20px; border-bottom: 1px solid var(--border-color); }
+        .sidebar-title { font-size: 1.1rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .sidebar-title i { color: var(--text-teal); }
+        .sidebar-subtitle { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+
+        .nav-menu { list-style: none; padding: 15px 10px; flex-grow: 1; overflow-y: auto; }
+        .nav-item { margin-bottom: 6px; }
+        .nav-link {
+            display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+            color: var(--text-muted); text-decoration: none; border-radius: 8px;
+            font-size: 0.92rem; font-weight: 500; transition: all 0.25s; cursor: pointer;
+        }
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(56, 182, 211, 0.12); color: var(--text-teal); border-left: 3px solid var(--text-teal);
+        }
+        .nav-link i { font-size: 1.1rem; width: 20px; text-align: center; }
+
+        .sidebar-footer { padding: 18px 16px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px; }
+
+        main { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; background-color: var(--bg-main); }
+        header {
+            padding: 16px 35px; background-color: rgba(10, 15, 24, 0.85); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 5;
+        }
+        .page-heading h1 { font-size: 1.35rem; font-weight: 600; color: #fff; }
+        .page-heading p { font-size: 0.8rem; color: var(--text-muted); }
+        .header-actions { display: flex; gap: 10px; }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; font-size: 0.88rem;
+            font-weight: 600; border-radius: 6px; border: 1px solid transparent; cursor: pointer; transition: all 0.2s;
+            text-decoration: none; font-family: var(--font-base);
+        }
+        .btn-primary { background-color: var(--text-teal); color: #06111e; }
+        .btn-primary:hover { background-color: #5ed0ec; box-shadow: 0 0 12px rgba(56, 182, 211, 0.4); }
+        .btn-github { background: linear-gradient(135deg, #2ea44f, #238636); color: #fff; }
+        .btn-github:hover { background: linear-gradient(135deg, #3fb950, #2ea44f); box-shadow: 0 0 15px rgba(46, 164, 79, 0.5); }
+        .btn-success { background-color: #27ae60; color: #fff; }
+        .btn-outline { background-color: transparent; border-color: var(--border-color); color: var(--text-light); }
+        .btn-outline:hover { background-color: rgba(255, 255, 255, 0.05); border-color: #fff; }
+        .btn-danger { background-color: rgba(201, 59, 43, 0.15); border-color: rgba(201, 59, 43, 0.4); color: #ff6b5b; }
+        .btn-danger:hover { background-color: var(--stamp-red); color: #fff; }
+        .btn-sm { padding: 6px 12px; font-size: 0.78rem; }
+
+        .content-area { padding: 25px 35px; max-width: 1400px; margin: 0 auto; width: 100%; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 22px 26px; margin-bottom: 22px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+        .card-title { font-size: 1.15rem; font-weight: 600; color: var(--text-gold); display: flex; align-items: center; gap: 10px; }
+
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group.full-width { grid-column: 1 / -1; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 7px; color: var(--text-muted); }
+        input[type="text"], input[type="password"], input[type="number"], textarea, select {
+            width: 100%; padding: 10px 14px; background-color: var(--bg-input); border: 1px solid var(--border-color);
+            border-radius: 6px; color: #fff; font-family: var(--font-base); font-size: 0.9rem; transition: all 0.25s;
+        }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: var(--border-focus); box-shadow: 0 0 10px rgba(56, 182, 211, 0.25); }
+
+        .preview-img-box { width: 100%; height: 130px; background-color: #060a10; border: 1px dashed var(--border-color); border-radius: 6px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-top: 8px; }
+        .preview-img-box img { width: 100%; height: 100%; object-fit: contain; }
+
+        .items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; margin-top: 15px; }
+        .item-box { background-color: #0b121e; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, border-color 0.2s; }
+        .item-box:hover { border-color: var(--text-teal); transform: translateY(-3px); }
+        .item-thumb { width: 100%; height: 160px; background-color: #05080e; position: relative; }
+        .item-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .item-badge { position: absolute; top: 8px; right: 8px; background: rgba(7, 11, 18, 0.85); border: 1px solid var(--text-gold); color: var(--text-gold); font-size: 0.68rem; padding: 2px 7px; border-radius: 12px; font-weight: 600; }
+        .item-content { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .item-title { font-size: 0.98rem; font-weight: 600; color: #fff; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .item-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .item-actions { display: flex; gap: 8px; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 10px; }
+
+        .modal { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(5, 8, 14, 0.85); backdrop-filter: blur(5px); align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 25px 30px; position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
+        .close-modal:hover { color: #fff; }
+
+        .toast {
+            position: fixed; bottom: 30px; right: 30px; background-color: var(--text-teal); color: #06111e;
+            padding: 14px 24px; border-radius: 8px; font-weight: 600; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+            display: flex; align-items: center; gap: 10px; transform: translateY(100px); opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); z-index: 2000;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.error { background-color: #e74c3c; color: #fff; }
+
+        #previewFrame { width: 100%; height: calc(100vh - 170px); border: 1px solid var(--border-color); border-radius: 10px; background: #000; }
+
+        @media (max-width: 900px) {
+            body { flex-direction: column; height: auto; overflow: auto; }
+            aside { width: 100%; height: auto; }
+            .content-area { padding: 20px 15px; }
+            #previewFrame { height: 500px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside>
+        <div>
+            <div class="sidebar-header">
+                <div class="sidebar-title">
+                    <i class="fa-solid fa-layer-group"></i> EXHIBITION CMS
+                </div>
+                <div class="sidebar-subtitle">우리는 별에서 왔습니다 관리자</div>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a class="nav-link active" onclick="switchTab('tab-general', this)">
+                        <i class="fa-solid fa-sliders"></i> 기본 정보 & 배너
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="switchTab('tab-poetry', this)">
+                        <i class="fa-solid fa-feather-pointed"></i> 작가의 글 & 퍼포먼스
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="switchTab('tab-artworks', this)">
+                        <i class="fa-solid fa-palette"></i> 전시 작품 관리 (<span id="countArtworks">30</span>)
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="switchTab('tab-merch', this)">
+                        <i class="fa-solid fa-shirt"></i> 공식 굿즈 관리 (<span id="countMerch">6</span>)
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="switchTab('tab-github', this)">
+                        <i class="fa-brands fa-github"></i> GitHub 실시간 배포 설정
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="switchTab('tab-preview', this); updateLivePreview();">
+                        <i class="fa-solid fa-eye"></i> 실시간 미리보기
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="btn btn-github" style="width:100%; justify-content:center;" onclick="publishToGithub()">
+                <i class="fa-brands fa-github"></i> 🚀 GitHub에 즉시 배포하기
+            </button>
+            <button class="btn btn-outline btn-sm" style="width:100%; justify-content:center;" onclick="exportHtmlFile()">
+                <i class="fa-solid fa-download"></i> index.html 다운로드
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main>
+        <header>
+            <div class="page-heading">
+                <h1 id="pageTitle">기본 정보 & 배너 설정</h1>
+                <p>전시회의 주요 정보 및 디자인을 수정하고 GitHub에 원클릭으로 반영합니다.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-github" onclick="publishToGithub()"><i class="fa-brands fa-github"></i> 🚀 깃허브 실시간 배포</button>
+                <button class="btn btn-success" onclick="saveAllChanges()"><i class="fa-solid fa-floppy-disk"></i> 저장</button>
+            </div>
+        </header>
+
+        <div class="content-area">
+
+            <!-- TAB 1: 기본 정보 & 배너 -->
+            <div id="tab-general" class="tab-panel active">
+                <div class="card">
+                    <div class="card-title"><i class="fa-solid fa-image"></i> 상단 배너 & 로고 이미지</div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>상단 메인 배너 이미지 URL</label>
+                            <input type="text" id="cfg_bannerUrl" oninput="previewImage('cfg_bannerUrl', 'preview_banner')">
+                            <div class="preview-img-box"><img id="preview_banner" src="" alt="배너 미리보기"></div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>헤더 로고 이미지 URL</label>
+                            <input type="text" id="cfg_logoUrl" oninput="previewImage('cfg_logoUrl', 'preview_logo')">
+                            <div class="preview-img-box" style="height: 90px;"><img id="preview_logo" src="" alt="로고 미리보기"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title"><i class="fa-solid fa-circle-info"></i> 전시회 기본 정보 & 장소 안내</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>전시회 메인 타이틀</label>
+                            <input type="text" id="cfg_mainTitle">
+                        </div>
+                        <div class="form-group">
+                            <label>작가명 / 브랜드</label>
+                            <input type="text" id="cfg_artistName">
+                        </div>
+                        <div class="form-group">
+                            <label>전시 기간 (Schedule)</label>
+                            <input type="text" id="cfg_schedule">
+                        </div>
+                        <div class="form-group">
+                            <label>오프닝 리셉션 일시</label>
+                            <input type="text" id="cfg_opening">
+                        </div>
+                        <div class="form-group">
+                            <label>갤러리 명칭 (Venue)</label>
+                            <input type="text" id="cfg_galleryName">
+                        </div>
+                        <div class="form-group">
+                            <label>전시장 주소 (Address)</label>
+                            <input type="text" id="cfg_galleryAddress">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>슬로건 / 인용구 (Quote)</label>
+                            <textarea id="cfg_quote" rows="2"></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>구글 지도 길찾기 링크 URL</label>
+                            <input type="text" id="cfg_mapUrl">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: 작가의 글 & 퍼포먼스 -->
+            <div id="tab-poetry" class="tab-panel">
+                <div class="card">
+                    <div class="card-title"><i class="fa-solid fa-scroll"></i> 작가의 글 (서정시) & 엔딩 크레딧 설정</div>
+                    <div class="form-group full-width">
+                        <label>시 본문 (엔터로 줄바꿈 구분)</label>
+                        <textarea id="cfg_poemText" rows="12"></textarea>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>서명 / 낙관 이미지 URL</label>
+                            <input type="text" id="cfg_signatureUrl" oninput="previewImage('cfg_signatureUrl', 'preview_sig')">
+                            <div class="preview-img-box" style="height: 70px;"><img id="preview_sig" src="" alt="서명 미리보기"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>엔딩 크레딧 스크롤 속도 (초 단위, 숫자가 클수록 느려짐)</label>
+                            <input type="number" id="cfg_scrollSpeed" min="10" max="60" value="34">
+                            <span style="font-size: 0.78rem; color: var(--text-muted);">현재 기본값: 34s (시작 딜레이 1.5초 적용)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title"><i class="fa-solid fa-paintbrush"></i> 퍼포먼스 안내 카드</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>퍼포먼스 이미지 URL</label>
+                            <input type="text" id="cfg_perfImgUrl" oninput="previewImage('cfg_perfImgUrl', 'preview_perf')">
+                            <div class="preview-img-box"><img id="preview_perf" src="" alt="퍼포먼스 미리보기"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>퍼포먼스 타이틀 & 부제</label>
+                            <input type="text" id="cfg_perfTitle" style="margin-bottom:8px;">
+                            <input type="text" id="cfg_perfSub">
+                            <label style="margin-top: 12px;">퍼포먼스 일시</label>
+                            <input type="text" id="cfg_perfTime">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>퍼포먼스 상세 설명</label>
+                            <textarea id="cfg_perfDesc" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: 전시 작품 관리 (30점) -->
+            <div id="tab-artworks" class="tab-panel">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fa-solid fa-palette"></i> 전시 작품 목록 (그림 & 글씨)</div>
+                        <button class="btn btn-primary btn-sm" onclick="openItemModal('artwork')"><i class="fa-solid fa-plus"></i> 새 작품 추가</button>
+                    </div>
+                    <div class="items-grid" id="artworksListContainer"></div>
+                </div>
+            </div>
+
+            <!-- TAB 4: 공식 굿즈 관리 (6종) -->
+            <div id="tab-merch" class="tab-panel">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fa-solid fa-shirt"></i> 공식 티셔츠 굿즈 목록</div>
+                        <button class="btn btn-primary btn-sm" onclick="openItemModal('merch')"><i class="fa-solid fa-plus"></i> 새 굿즈 추가</button>
+                    </div>
+                    <div class="items-grid" id="merchListContainer"></div>
+                </div>
+            </div>
+
+            <!-- TAB 5: GitHub 실시간 배포 설정 -->
+            <div id="tab-github" class="tab-panel">
+                <div class="card">
+                    <div class="card-title"><i class="fa-brands fa-github"></i> GitHub 저장소 및 토큰 연동 설정</div>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 20px;">
+                        GitHub Personal Access Token(PAT)을 입력하시면, 관리자 페이지에서 버튼 하나로 깃허브 `index.html`을 즉시 업데이트하여 배포할 수 있습니다.
+                    </p>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>GitHub 사용자 계정 (Owner)</label>
+                            <input type="text" id="gh_owner" value="daroo2314">
+                        </div>
+                        <div class="form-group">
+                            <label>GitHub 저장소 이름 (Repository)</label>
+                            <input type="text" id="gh_repo" value="norman">
+                        </div>
+                        <div class="form-group">
+                            <label>배포 브랜치 (Branch)</label>
+                            <input type="text" id="gh_branch" value="main">
+                        </div>
+                        <div class="form-group">
+                            <label>대상 파일 경로 (Path)</label>
+                            <input type="text" id="gh_path" value="index.html">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>GitHub Personal Access Token (토큰 값)</label>
+                            <input type="password" id="gh_token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+                            <span style="font-size: 0.78rem; color: var(--text-gold);">
+                                * 토큰은 브라우저 로컬 저장소에만 안전하게 저장되며 외부로 전송되지 않습니다.
+                            </span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; display:flex; gap:12px;">
+                        <button class="btn btn-primary" onclick="saveGithubConfig()"><i class="fa-solid fa-key"></i> 깃허브 연동 정보 저장</button>
+                        <button class="btn btn-github" onclick="publishToGithub()"><i class="fa-solid fa-cloud-arrow-up"></i> 지금 바로 깃허브에 배포하기</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 6: 실시간 미리보기 -->
+            <div id="tab-preview" class="tab-panel">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title"><i class="fa-solid fa-desktop"></i> 배포 웹페이지 실시간 렌더링 미리보기</div>
+                        <button class="btn btn-primary btn-sm" onclick="updateLivePreview()"><i class="fa-solid fa-rotate"></i> 새로고침</button>
+                    </div>
+                    <iframe id="previewFrame" title="Live Preview"></iframe>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Item Edit / Add Modal -->
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeItemModal()">&times;</span>
+            <h2 id="modalFormTitle" style="color:var(--text-gold); margin-bottom: 20px; font-size: 1.25rem;">작품 추가/수정</h2>
+            
+            <form id="itemForm" onsubmit="saveItem(event)">
+                <input type="hidden" id="item_type">
+                <input type="hidden" id="item_index">
+
+                <div class="form-group">
+                    <label>제목 (Title)</label>
+                    <input type="text" id="item_title" required>
+                </div>
+
+                <div class="form-group" id="group_category">
+                    <label>카테고리 구분</label>
+                    <select id="item_category">
+                        <option value="painting">그림 (Painting)</option>
+                        <option value="calligraphy">글씨 (Calligraphy)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="group_badge" style="display:none;">
+                    <label>굿즈 배지 라벨 (예: SIGNATURE, LIMITED)</label>
+                    <input type="text" id="item_badge" placeholder="SIGNATURE">
+                </div>
+
+                <div class="form-group">
+                    <label>이미지 URL</label>
+                    <input type="text" id="item_img" required oninput="previewImage('item_img', 'preview_modal_img')">
+                    <div class="preview-img-box" style="height: 120px;"><img id="preview_modal_img" src="" alt="미리보기"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>작품 설명 / 재료 (Description)</label>
+                    <textarea id="item_desc" rows="3" required></textarea>
+                </div>
+
+                <div style="display:flex; justify-content: flex-end; gap: 10px; margin-top: 25px;">
+                    <button type="button" class="btn btn-outline" onclick="closeItemModal()">취소</button>
+                    <button type="submit" class="btn btn-primary">저장하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fa-solid fa-circle-check"></i> <span id="toastMsg">성공적으로 저장되었습니다.</span>
+    </div>
+
+    <script>
+        const DEFAULT_CONFIG = {
+            general: {
+                bannerUrl: "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FVkNAj%2FdJMcaiEvOLc%2FAAAAAAAAAAAAAAAAAAAAALuLoGSWBS4p19MnO2Y8bdJr4puR4VV1gIOSh-NmyNm3%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DrtLLK3kGushN3axwdujgECtVWz4%253D",
+                logoUrl: "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fbffejw%2FdJMcaiExnKS%2FAAAAAAAAAAAAAAAAAAAAAJ5MdlDFtUbrCCPkTf49xFhntkMfLt_U75Ghy2of7GDN%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DwEnyo%252F8krmLHzo6zkohqnUWDWSw%253D",
+                mainTitle: "우리는 별에서 왔습니다.",
+                artistName: "NORMAN MYUNG",
+                schedule: "2026. 09. 19 — 09. 25 | 11:00 AM — 5:00 PM",
+                opening: "2026. 09. 19 (Sat) 3:00 PM",
+                galleryName: "EK Gallery",
+                galleryAddress: "1125 Crenshaw Blvd, Los Angeles, CA 90019",
+                quote: "The canvas dreams in verse; The verse paints in soul.\nA place where poetry and Art Meet",
+                mapUrl: "https://maps.google.com/?q=1125+Crenshaw+Blvd,+Los+Angeles,+CA+90019"
+            },
+            poetry: {
+                poemText: `보이저 위성이
+60억 킬로미터 떨어진 곳에서 촬영한
+‘창백한 푸른 점’
+
+억겁 시공간에서 큰 행성끼리 부딪혀
+먼지처럼 부서진 돌멩이 중 하나
+
+너와 내가 만난 지구……
+말도 안 되는 일이 벌어진 거야
+
+그마저도 이해할 수 없어……
+
+우리는 이미 어느 별에선가
+소명을 다하고 다시 태어난 천국이
+여기일지도 모른다는 거야
+
+존재했던 것은 영원히 존재하는 것
+
+죽음은 소멸하는 것이 아니라
+영원히 어느 시공간을
+지금도 지나가고 있다 하는데
+삶 앞에서 왜 이렇게 숙연 해지는것이야
+
+오늘도 빨간 우체통이 보이는
+도서관 창가에 앉아 너에게 편지를 쓴다.`,
+                signatureUrl: "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fb3cHpv%2FdJMcadpCORZ%2FAAAAAAAAAAAAAAAAAAAAACPqWqk7Hya8B6UfEOB8CaTHXp1ztHvZsw3Z4XaiARCb%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DJuAZ%252F4HTZYvfBNOKhYlTBO5kHjA%253D",
+                scrollSpeed: 34,
+                perfImgUrl: "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FYKWsn%2FdJMcajchOcv%2FAAAAAAAAAAAAAAAAAAAAAFquSyBSom7vYkDGVq5pf7_sd1XQ6e-ltHrrdMbpxLZL%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D08aRYlnfQsYSImhPadABoUJ0Djo%253D",
+                perfTitle: "PERFORMANCE",
+                perfSub: "The Soul in motion",
+                perfTime: "Sep 19, 2026 4:00 PM",
+                perfDesc: "EK gallery main hall\n붓끝이 공간을 가르는 역동적인 캘리그라피 라이브 퍼포먼스가 펼쳐집니다."
+            },
+            artworks: [
+                { category: 'painting', title: '밤에 피는 해바라기', desc: '캔버스에 유채', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbcW68l%2FdJMcaf8JUf9%2FAAAAAAAAAAAAAAAAAAAAADG4oObcppWDU0c6N_LX9_jnprnHeVQv8_sUcxJrKcFs%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D%252FgRhcxVt%252FdBy2el5SB%252F2pYG7U8U%253D' },
+                { category: 'painting', title: '칼스베리의 회상', desc: '캔버스에 오일파스텔 & 유채', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FmcqGW%2FdJMcaa7BLIq%2FAAAAAAAAAAAAAAAAAAAAANZ0ugx20Wkp40NlqF3x8nYb_ZK5-ApIVea3p7jBJNot%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D10Nkwp37etnmMfCuANtY6z%252BgJdQ%253D' },
+                { category: 'painting', title: '자작나무 숲', desc: '수묵채색 혼합재료', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F6VAtm%2FdJMcaal4f5E%2FAAAAAAAAAAAAAAAAAAAAAInsoEGuw7n_B4oPwcef91AXGD9qI1UXOI-JboYdvotL%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DjKt2akCXP3iq%252F2IaDv94Ywkzz%252BU%253D' },
+                { category: 'painting', title: '모정(母情) I', desc: '한지와 분채', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FtGRyF%2FdJMcagGK3iD%2FAAAAAAAAAAAAAAAAAAAAAPk_gr9kMkEO6tM59NoWbpc7bzR-TvhKl6yvAg43unxw%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dj%252B6Lj3H43whGr30GotT1Z0P4W2E%253D' },
+                { category: 'painting', title: '회상 (回想)', desc: '캔버스에 아크릴, 60호', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F6R06K%2FdJMcacjViHE%2FAAAAAAAAAAAAAAAAAAAAADwWSFb-gRhTX7zUZzYXiP2VVENZmrhV7F5equ9FrOhc%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Du0ZIpXnb089XdK01X68x42VVOy8%253D' },
+                { category: 'painting', title: '벽오동 (碧梧桐)', desc: '캔버스에 유채, 40호', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F3HYhx%2FdJMcadQFbC9%2FAAAAAAAAAAAAAAAAAAAAAGTVOM6FTt8tl90AEPjfWMUYoP_rkMaKSYoUU_P-n0lQ%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DFm92TdzyCAoS3Xt1%252BxWNTZTOLMg%253D' },
+                { category: 'painting', title: '말리부의 여인', desc: '캔버스에 아크릴', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FHXacc%2FdJMcaal4f5K%2FAAAAAAAAAAAAAAAAAAAAAA-h4lessI3tXS8t6gSn3GDwEv8EKN1nqn5odfjDZ_IA%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DGtv%252FJeoHWuKn8QZFgESjNnb3Woo%253D' },
+                { category: 'painting', title: '월하연가 (Moonlit Lotus Pond)', desc: '한국화 수묵채색', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FlcOOQ%2FdJMcaa7BLIc%2FAAAAAAAAAAAAAAAAAAAAAMVLPc-KaiikGM8OD91iDbJ57zpm3Hi4yrCvNZM4vhlX%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dyvj7Ij1CeBy8m3yvmCocFiDKqCQ%253D' },
+                { category: 'painting', title: '약수시장 1970', desc: '한지에 아크릴 및 먹', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fb8esuI%2FdJMcagGK3iE%2FAAAAAAAAAAAAAAAAAAAAAAofVTHLlwbCYvlVQf3kOqCajYuCtm0WnVrRApxu85BI%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DEx37npTNtiErH3A%252BNDsnBzW6Jmc%253D' },
+                { category: 'painting', title: '서해 (西海)', desc: '캔버스에 아크릴', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fc0EDXD%2FdJMcabMfdI3%2FAAAAAAAAAAAAAAAAAAAAAH1d5sHuWUnkWaA2Kf7qa0CeP47SekqLfD_3A3Ki8v5X%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DFI1%252FDiY%252Bf2rm%252B9ho1muY%252B2Co0XM%253D' },
+                { category: 'painting', title: '또 다른 빨래터', desc: '캔버스에 아크릴', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fc5DNbK%2FdJMcaal4f5x%2FAAAAAAAAAAAAAAAAAAAAAF6MR3G3FBu38BU5PZ1hF1YueTfnEDzGBHL-eMEsfmsB%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dh%252Bjpo64LbPrUif1P8k07GNE9GZc%253D' },
+                { category: 'painting', title: '가족 I', desc: '캔버스에 아크릴', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbGCTid%2FdJMcadpAKWP%2FAAAAAAAAAAAAAAAAAAAAAJfExRfCZKIPiklQSJ0MSHHP9Z2RBLu2GNhe3Xbd_4va%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DyYO1g4EJ61GH4QoJZoiYXydhLrw%253D' },
+                { category: 'painting', title: '기억의 저편', desc: '캔버스에 아크릴', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FwNXYa%2FdJMcabMfdIW%2FAAAAAAAAAAAAAAAAAAAAAJEbKb-v8UfLZU7ZwqmPY6zAKO2jwwdCaehnl97gq6nN%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DTo3rpp2u9rio6jD6824U%252FLpMszU%253D' },
+                { category: 'painting', title: '모정 Ⅱ (母情 Ⅱ)', desc: '캔버스에 아크릴', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FNJn60%2FdJMcaa7BLIj%2FAAAAAAAAAAAAAAAAAAAAAOcOcc7h-o1hac2Hijksucq1Wh0YIQlucOUf9TZlHXg2%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dre6ZpNUR5Ldn%252FKILTUR79SqJQFY%253D' },
+                { category: 'painting', title: '달빛 사냥꾼(The Moonlight Hunter)', desc: '캔버스에 아크릴', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcUIuQq%2FdJMcajchWlI%2FAAAAAAAAAAAAAAAAAAAAAHniiktIjmyODBGHXt85gykKYDBvkMW9lqLd5ib9dzN_%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D2g33TtuV4nAvkO8Fg0zA9Xg47iE%253D' },
+                
+                { category: 'calligraphy', title: '우리는 별에서 왔습니다', desc: '전통 한지에 먹, 전각인', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcuFJM4%2FdJMb99Od5zw%2FAAAAAAAAAAAAAAAAAAAAAC8PhA6XzgJb8Diw3FaoWS7AqfpdRLMLIrK2KHKGaGRh%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Di0nvhup1e5hWyPdURYv2UaksHSs%253D' },
+                { category: 'calligraphy', title: '沈默 (침묵과 사랑)', desc: '한지에 농묵', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FRPqsN%2FdJMcadQDKWU%2FAAAAAAAAAAAAAAAAAAAAAEkfsldB9qc95HsD7dG78XF3le2VO6Y3eBsGipYFVcX9%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DxkraJnjH0iKUZO9Aqb1paSOXq8Y%253D' },
+                { category: 'calligraphy', title: '광야 (The Wilderness of Hope)', desc: '전통 한지와 먹', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F5wipX%2FdJMb99Od5zo%2FAAAAAAAAAAAAAAAAAAAAAALb4rVBpoKkvK166Oit_7oCWCpt6-36DG2TD5tJlYCN%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DQNMSXmOhxr0tauz0sNAplRGDnxM%253D' },
+                { category: 'calligraphy', title: '북한강에서 (At the River)', desc: '수묵 캘리그라피', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FCmpsb%2FdJMcadQDKWP%2FAAAAAAAAAAAAAAAAAAAAAOgS-ICUwNjZZ3vp5VIDdU-LhYSQ54mVVyTXkQECg7ei%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DtdxN5D9tn5CvtJCEq2PMzq77ODY%253D' },
+                { category: 'calligraphy', title: '성찰 (Reflection)', desc: '한지 족자', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Ft7Ij3%2FdJMcacYzIbF%2FAAAAAAAAAAAAAAAAAAAAAEZVmt6zdqZioB7G_O9ob9zpauYolGnTroyZ61O_GHVk%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DyDggCiYLbskxOxJCyJLeNv9sSPw%253D' },
+                { category: 'calligraphy', title: '동행 (Companion)', desc: '화선지와 먹', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FckV7YR%2FdJMcadQDKWR%2FAAAAAAAAAAAAAAAAAAAAALsKEeHDWqQQsFnyxCyG8KUiEDSqaIkW43sWtdOyM9-e%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DOTsrvpAL%252B6vbYR%252F3N2X0%252FlgVjSw%253D' },
+                { category: 'calligraphy', title: '하늘과 바람과 별 (윤동주 서시 필서)', desc: '한지, 캘리그라피', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FIQwMI%2FdJMcaiEvOWg%2FAAAAAAAAAAAAAAAAAAAAAH4xF7bT1xywliP5vhHJ3pvevHd6WSKF6C7sL8OcwK7P%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DEg7ipxvdsqVAsK3BkkBqIz%252FKeWw%253D' },
+                { category: 'calligraphy', title: '지나가는 길에 (On the Way)', desc: '닥종이 한지, 서화합일', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FlURtg%2FdJMcaiEvOWd%2FAAAAAAAAAAAAAAAAAAAAAHZizGK-RHiWeSZ6cPg3jvduYJLOHYJvwiWwPDIGaNoM%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DB0Wdh7w2yuB%252FpnA%252BOd0EUHj5iSo%253D' },
+                { category: 'calligraphy', title: '만추 (Late Autumn)', desc: '황토빛 노을로 물든 늦가을의 서정적 단상', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FdNhOwk%2FdJMb99Od5zm%2FAAAAAAAAAAAAAAAAAAAAAIlILoGzkIUGfaFLUCXsDwP9Rcy87Md0k9XtDSO8fn_i%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D0vfEPbHevpa1Vx4gJstid3bXvBU%253D' },
+                { category: 'calligraphy', title: '아버지 (Father)', desc: '아버지의 뒷모습에 투영된 삶의 여정', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FlI1bX%2FdJMb99Od5zp%2FAAAAAAAAAAAAAAAAAAAAAHFPEU17jjPDcjxXKIHKcH1jGZth2O2YMe3e2U_GuOpk%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Du9rClymc53mcXlAJohgZCqfFcuM%253D' },
+                { category: 'calligraphy', title: '무소의 뿔처럼 혼자서 가라', desc: '한지,먹과 혼합매체', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2Fd4czDj%2FdJMcadJTDnK%2FAAAAAAAAAAAAAAAAAAAAABxHBB-KK9-3Loq8vd7mJSKWw2kjl2m4rVea8ESd_cxH%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3D5W%252BnQPI%252Bnhj5d8vCt3C%252BHmiqCrQ%253D' },
+                { category: 'calligraphy', title: '청산(靑山)은 나를 보고', desc: '한지,먹과 혼합매체', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbP2s0t%2FdJMcadwjHwd%2FAAAAAAAAAAAAAAAAAAAAAMXbX4Flp84piYwYtmP-Z-wY6f9QXMoWelecDJ0z7LCi%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DOkdrZXGocUmMsbAGLXpJTfgdqRY%253D' },
+                { category: 'calligraphy', title: '귀향 (The Way Home)', desc: '한지,먹과 혼합매체', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbfNdST%2FdJMcadJTDnG%2FAAAAAAAAAAAAAAAAAAAAADO0TSHGK545eNNkvEsY7c7lZt2TWnqOwcYMFQHRX2Ck%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DhhmU1oAeE4DmTGNuVYXyySHW8Yg%253D' },
+                { category: 'calligraphy', title: '심해 (Deep Sea)', desc: '한지,먹', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FcEFA4l%2FdJMcabedDJQ%2FAAAAAAAAAAAAAAAAAAAAAEDKxf2M2sOOAw_XFBiYwcR8Lx9J86Bmkc1cpK9vMTqn%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DXs0yFljQDjb8vQvTBCoo5nGVSTk%253D' },
+                { category: 'calligraphy', title: '별과 같은 사람', desc: '한지,먹', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FceYciC%2FdJMcaaGzW7a%2FAAAAAAAAAAAAAAAAAAAAAMeCr-20wgc_qbdOep10stF4BYM0t5tg9BQIGVl9DSF4%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DodNSMvb%252FVdyI0X2wa93Z0glk0nc%253D' }
+            ],
+            merch: [
+                { badge: 'SIGNATURE', title: '시그니처 에디션', desc: '검정 반팔 티셔츠 20수. 앞면: EXHIBITION 2026 / 뒷면: 우리는 별에서 왔습니다 메인 포스터 프린팅', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FpYXei%2FdJMcadwhMSK%2FAAAAAAAAAAAAAAAAAAAAADNV2KBroLb3rPZyJafTxpB_8In-lrIUpbxpaTXFU1Fc%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Deg5xzvvFqwyoQFC3dOshbADYIUQ%253D' },
+                { badge: 'LIMITED', title: '달빛사냥꾼 아트워크', desc: '검정 반팔 티셔츠 20수. 앞면: 전시회 메인 타이틀 / 뒷면: 달빛사냥꾼 캐릭터 아트워크', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FeiVsLS%2FdJMcadb0snJ%2FAAAAAAAAAAAAAAAAAAAAAPQao4fehAYcBCQH5lp2YHmMQtze0FFvIgsyasVo4w8p%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dca7y25yeXLQzLvTP%252FQeGDzUdH4Y%253D' },
+                { badge: 'LIMITED', title: '아버지 아트워크', desc: '검정 반팔 티셔츠 20수. 앞면: 전시회 메인 타이틀 / 뒷면: 아버지 캘리그라피 아트워크', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FvWADs%2FdJMcadb0snI%2FAAAAAAAAAAAAAAAAAAAAAJ7SMPm-FE1dEQnslDGCfdceSNyHN1n6143YkRphwlZL%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DmNZhLb7%252FLgZebzsq%252Ba78dW2COqU%253D' },
+                { badge: 'VERSE ART', title: '동행 캘리그라피', desc: '검정 반팔 티셔츠 20수. 앞면: 전시회 메인 타이틀 / 뒷면: 동행 캘리그라피 아트워크 프린팅', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbtMt5f%2FdJMcadb0snH%2FAAAAAAAAAAAAAAAAAAAAAOxrorYh0kGgz3pC4psX-QzQ2kwSSok3LpzmV1Br4zOd%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3DBUZOTo6bUFKJ%252BhQrP8z94Mb7AHk%253D' },
+                { badge: 'LIMITED', title: '안드로메다 은하여행 연작', desc: '검정 반팔 티셔츠 20수. 은하철도 999 회화 연작 티셔츠', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2F7Bw1S%2FdJMcagGK6Qd%2FAAAAAAAAAAAAAAAAAAAAAMVDp4ebZn4wt2o4AFTNtCAdQKrPAf_fzHp0HWoF7qmn%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dgank1RGWObhX2Qr572nsn%252BTnrQU%253D' },
+                { badge: 'SIGNATURE', title: '퍼포먼스 아트워크', desc: '검정 반팔 티셔츠 20수. 퍼포먼스 LA 2026 아트워크 프린팅', img: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbPVc6H%2FdJMcadwhMSJ%2FAAAAAAAAAAAAAAAAAAAAAD32J3DuWCdx6yEgE09Drjoi00kejZeQTj9FjsBP_i7i%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1788188399%26allow_ip%3D%26allow_referer%3D%26signature%3Dwy%252B2bRge7q%252BdOqYunq%252B3BFjkZoI%253D' }
+            ]
+        };
+
+        const STORAGE_KEY = 'EXHIBITION_2026_CONFIG';
+        const GH_KEY = 'EXHIBITION_GH_TOKEN';
+        let appData = {};
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            populateForm();
+            renderArtworks();
+            renderMerch();
+            loadGithubConfig();
+        });
+
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try { appData = JSON.parse(saved); }
+                catch(e) { appData = JSON.parse(JSON.stringify(DEFAULT_CONFIG)); }
+            } else {
+                appData = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+            }
+        }
+
+        function loadGithubConfig() {
+            const savedToken = localStorage.getItem(GH_KEY);
+            if (savedToken) document.getElementById('gh_token').value = savedToken;
+        }
+
+        function saveGithubConfig() {
+            const token = document.getElementById('gh_token').value.trim();
+            if (token) {
+                localStorage.setItem(GH_KEY, token);
+                showToast('GitHub 토큰이 안전하게 저장되었습니다.');
+            } else {
+                localStorage.removeItem(GH_KEY);
+                showToast('GitHub 토큰이 삭제되었습니다.');
+            }
+        }
+
+        function populateForm() {
+            document.getElementById('cfg_bannerUrl').value = appData.general.bannerUrl;
+            document.getElementById('cfg_logoUrl').value = appData.general.logoUrl;
+            document.getElementById('cfg_mainTitle').value = appData.general.mainTitle;
+            document.getElementById('cfg_artistName').value = appData.general.artistName;
+            document.getElementById('cfg_schedule').value = appData.general.schedule;
+            document.getElementById('cfg_opening').value = appData.general.opening;
+            document.getElementById('cfg_galleryName').value = appData.general.galleryName;
+            document.getElementById('cfg_galleryAddress').value = appData.general.galleryAddress;
+            document.getElementById('cfg_quote').value = appData.general.quote;
+            document.getElementById('cfg_mapUrl').value = appData.general.mapUrl;
+
+            document.getElementById('cfg_poemText').value = appData.poetry.poemText;
+            document.getElementById('cfg_signatureUrl').value = appData.poetry.signatureUrl;
+            document.getElementById('cfg_scrollSpeed').value = appData.poetry.scrollSpeed || 34;
+            document.getElementById('cfg_perfImgUrl').value = appData.poetry.perfImgUrl;
+            document.getElementById('cfg_perfTitle').value = appData.poetry.perfTitle;
+            document.getElementById('cfg_perfSub').value = appData.poetry.perfSub;
+            document.getElementById('cfg_perfTime').value = appData.poetry.perfTime;
+            document.getElementById('cfg_perfDesc').value = appData.poetry.perfDesc;
+
+            previewImage('cfg_bannerUrl', 'preview_banner');
+            previewImage('cfg_logoUrl', 'preview_logo');
+            previewImage('cfg_signatureUrl', 'preview_sig');
+            previewImage('cfg_perfImgUrl', 'preview_perf');
+        }
+
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            el.classList.add('active');
+
+            const titles = {
+                'tab-general': '기본 정보 & 배너 설정',
+                'tab-poetry': '작가의 글 & 퍼포먼스 설정',
+                'tab-artworks': '전시 작품 관리 (Artworks)',
+                'tab-merch': '공식 굿즈(티셔츠) 관리',
+                'tab-github': 'GitHub 실시간 배포 설정',
+                'tab-preview': '실시간 미리보기'
+            };
+            document.getElementById('pageTitle').innerText = titles[tabId] || '관리자';
+        }
+
+        function previewImage(inputId, imgId) {
+            const val = document.getElementById(inputId).value;
+            const img = document.getElementById(imgId);
+            if (val) { img.src = val; img.style.display = 'block'; }
+            else { img.style.display = 'none'; }
+        }
+
+        function renderArtworks() {
+            const container = document.getElementById('artworksListContainer');
+            container.innerHTML = '';
+            document.getElementById('countArtworks').innerText = appData.artworks.length;
+
+            appData.artworks.forEach((art, idx) => {
+                const tagLabel = art.category === 'painting' ? '그림 (Painting)' : '글씨 (Calligraphy)';
+                const card = document.createElement('div');
+                card.className = 'item-box';
+                card.innerHTML = `
+                    <div class="item-thumb">
+                        <span class="item-badge">${tagLabel}</span>
+                        <img src="${art.img}" onerror="this.src='https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=400&q=80'">
+                    </div>
+                    <div class="item-content">
+                        <div>
+                            <div class="item-title">#${idx+1}. ${art.title}</div>
+                            <div class="item-desc">${art.desc}</div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-outline btn-sm" style="flex:1;" onclick="editItem('artwork', ${idx})"><i class="fa-solid fa-pen"></i> 수정</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteItem('artwork', ${idx})"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderMerch() {
+            const container = document.getElementById('merchListContainer');
+            container.innerHTML = '';
+            document.getElementById('countMerch').innerText = appData.merch.length;
+
+            appData.merch.forEach((m, idx) => {
+                const card = document.createElement('div');
+                card.className = 'item-box';
+                card.innerHTML = `
+                    <div class="item-thumb">
+                        <span class="item-badge">${m.badge || 'GOODS'}</span>
+                        <img src="${m.img}" onerror="this.src='https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80'">
+                    </div>
+                    <div class="item-content">
+                        <div>
+                            <div class="item-title">#${idx+1}. ${m.title}</div>
+                            <div class="item-desc">${m.desc}</div>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-outline btn-sm" style="flex:1;" onclick="editItem('merch', ${idx})"><i class="fa-solid fa-pen"></i> 수정</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteItem('merch', ${idx})"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function openItemModal(type, index = -1) {
+            document.getElementById('item_type').value = type;
+            document.getElementById('item_index').value = index;
+
+            const isMerch = (type === 'merch');
+            document.getElementById('group_category').style.display = isMerch ? 'none' : 'block';
+            document.getElementById('group_badge').style.display = isMerch ? 'block' : 'none';
+
+            if (index >= 0) {
+                const data = isMerch ? appData.merch[index] : appData.artworks[index];
+                document.getElementById('modalFormTitle').innerText = isMerch ? '굿즈 수정' : '작품 수정';
+                document.getElementById('item_title').value = data.title;
+                document.getElementById('item_desc').value = data.desc;
+                document.getElementById('item_img').value = data.img;
+                if (isMerch) document.getElementById('item_badge').value = data.badge || '';
+                else document.getElementById('item_category').value = data.category || 'painting';
+            } else {
+                document.getElementById('modalFormTitle').innerText = isMerch ? '새 굿즈 추가' : '새 작품 추가';
+                document.getElementById('itemForm').reset();
+                document.getElementById('item_type').value = type;
+                document.getElementById('item_index').value = -1;
+            }
+
+            previewImage('item_img', 'preview_modal_img');
+            document.getElementById('itemModal').style.display = 'flex';
+        }
+
+        function editItem(type, index) { openItemModal(type, index); }
+
+        function deleteItem(type, index) {
+            if (!confirm('정말 삭제하시겠습니까?')) return;
+            if (type === 'artwork') {
+                appData.artworks.splice(index, 1);
+                renderArtworks();
+            } else {
+                appData.merch.splice(index, 1);
+                renderMerch();
+            }
+            saveToStorage();
+            showToast('삭제되었습니다.');
+        }
+
+        function closeItemModal() { document.getElementById('itemModal').style.display = 'none'; }
+
+        function saveItem(e) {
+            e.preventDefault();
+            const type = document.getElementById('item_type').value;
+            const index = parseInt(document.getElementById('item_index').value);
+
+            const title = document.getElementById('item_title').value;
+            const desc = document.getElementById('item_desc').value;
+            const img = document.getElementById('item_img').value;
+
+            if (type === 'artwork') {
+                const category = document.getElementById('item_category').value;
+                const newItem = { category, title, desc, img };
+                if (index >= 0) appData.artworks[index] = newItem;
+                else appData.artworks.push(newItem);
+                renderArtworks();
+            } else {
+                const badge = document.getElementById('item_badge').value || 'GOODS';
+                const newItem = { badge, title, desc, img };
+                if (index >= 0) appData.merch[index] = newItem;
+                else appData.merch.push(newItem);
+                renderMerch();
+            }
+
+            closeItemModal();
+            saveToStorage();
+            showToast('저장되었습니다.');
+        }
+
+        function saveAllChanges() {
+            appData.general.bannerUrl = document.getElementById('cfg_bannerUrl').value;
+            appData.general.logoUrl = document.getElementById('cfg_logoUrl').value;
+            appData.general.mainTitle = document.getElementById('cfg_mainTitle').value;
+            appData.general.artistName = document.getElementById('cfg_artistName').value;
+            appData.general.schedule = document.getElementById('cfg_schedule').value;
+            appData.general.opening = document.getElementById('cfg_opening').value;
+            appData.general.galleryName = document.getElementById('cfg_galleryName').value;
+            appData.general.galleryAddress = document.getElementById('cfg_galleryAddress').value;
+            appData.general.quote = document.getElementById('cfg_quote').value;
+            appData.general.mapUrl = document.getElementById('cfg_mapUrl').value;
+
+            appData.poetry.poemText = document.getElementById('cfg_poemText').value;
+            appData.poetry.signatureUrl = document.getElementById('cfg_signatureUrl').value;
+            appData.poetry.scrollSpeed = parseInt(document.getElementById('cfg_scrollSpeed').value) || 34;
+            appData.poetry.perfImgUrl = document.getElementById('cfg_perfImgUrl').value;
+            appData.poetry.perfTitle = document.getElementById('cfg_perfTitle').value;
+            appData.poetry.perfSub = document.getElementById('cfg_perfSub').value;
+            appData.poetry.perfTime = document.getElementById('cfg_perfTime').value;
+            appData.poetry.perfDesc = document.getElementById('cfg_perfDesc').value;
+
+            saveToStorage();
+            showToast('모든 설정이 성공적으로 저장되었습니다.');
+        }
+
+        function saveToStorage() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+        }
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.className = 'toast' + (isError ? ' error' : '') + ' show';
+            setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+        // =========================================================
+        // GitHub REST API 직접 연동 (원클릭 커밋 & 실시간 배포)
+        // =========================================================
+        async function publishToGithub() {
+            saveAllChanges();
+            
+            const owner = document.getElementById('gh_owner').value.trim() || 'daroo2314';
+            const repo = document.getElementById('gh_repo').value.trim() || 'norman';
+            const branch = document.getElementById('gh_branch').value.trim() || 'main';
+            const path = document.getElementById('gh_path').value.trim() || 'index.html';
+            let token = document.getElementById('gh_token').value.trim();
+
+            if (!token) {
+                token = localStorage.getItem(GH_KEY);
+            }
+
+            if (!token) {
+                switchTab('tab-github', document.querySelectorAll('.nav-link')[4]);
+                showToast('GitHub Personal Access Token을 먼저 입력해 주세요.', true);
+                return;
+            }
+
+            showToast('GitHub에 연결하여 배포 준비 중...');
+
+            try {
+                const htmlContent = generateProductionHtml();
+
+                // 1. 기존 파일의 SHA 해시 조회 (GitHub PUT API 필수 항목)
+                const fileApiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`;
+                let sha = null;
+
+                const getRes = await fetch(fileApiUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (getRes.ok) {
+                    const fileData = await getRes.json();
+                    sha = fileData.sha;
+                } else if (getRes.status !== 404) {
+                    throw new Error(`GitHub 파일 정보 확인 실패 (상태 코드: ${getRes.status})`);
+                }
+
+                // 2. UTF-8 HTML 문자열을 Base64로 인코딩
+                const base64Content = btoa(unescape(encodeURIComponent(htmlContent)));
+
+                // 3. GitHub API로 파일 커밋 & 푸시
+                const putPayload = {
+                    message: `Update exhibition content from Admin CMS (${new Date().toLocaleString()})`,
+                    content: base64Content,
+                    branch: branch
+                };
+                if (sha) putPayload.sha = sha;
+
+                const putRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(putPayload)
+                });
+
+                if (!putRes.ok) {
+                    const errData = await putRes.json();
+                    throw new Error(errData.message || 'GitHub 커밋 실패');
+                }
+
+                showToast('🚀 GitHub에 성공적으로 배포되었습니다! (약 20~30초 후 사이트 반영)');
+            } catch (err) {
+                console.error(err);
+                showToast(`배포 실패: ${err.message}`, true);
+            }
+        }
+
+        // ==========================================
+        // 최종 배포용 HTML 템플릿 생성 엔진
+        // ==========================================
+        function generateProductionHtml() {
+            saveAllChanges();
+
+            const speed = appData.poetry.scrollSpeed || 34;
+
+            // 전체 작품 및 굿즈 JSON 빌드
+            const allItems = [
+                ...appData.artworks.map((a, i) => ({
+                    category: `${a.category === 'painting' ? 'Painting' : 'Calligraphy'} #${String(i+1).padStart(2, '0')}`,
+                    title: a.title,
+                    desc: a.desc,
+                    img: a.img
+                })),
+                ...appData.merch.map((m, i) => ({
+                    category: `Official Merch #${String(i+1).padStart(2, '0')}`,
+                    title: m.title,
+                    desc: m.desc,
+                    img: m.img
+                }))
+            ];
+
+            const artworksHtml = appData.artworks.map((art, i) => `
+            <div class="art-card reveal-item" data-category="${art.category}" onclick="openModalIndex(${i})">
+                <div class="art-thumb">
+                    <img src="${art.img}" alt="${escapeHtml(art.title)}" onerror="this.src='https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80'">
+                    <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+                </div>
+                <div class="art-info">
+                    <span class="art-tag">${art.category === 'painting' ? 'Painting' : 'Calligraphy'} #${String(i+1).padStart(2, '0')}</span>
+                    <h3 class="art-title">${escapeHtml(art.title)}</h3>
+                    <p class="art-desc">${escapeHtml(art.desc)}</p>
+                </div>
+            </div>`).join('\n');
+
+            const merchHtml = appData.merch.map((m, i) => `
+            <div class="art-card reveal-item" onclick="openModalIndex(${appData.artworks.length + i})">
+                <div class="art-thumb">
+                    <span class="merch-badge">${escapeHtml(m.badge || 'SIGNATURE')}</span>
+                    <img src="${m.img}" alt="${escapeHtml(m.title)}" onerror="this.src='https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=600&q=80'">
+                    <div class="zoom-overlay"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+                </div>
+                <div class="art-info">
+                    <span class="art-tag">Merchandise ${String(i+1).padStart(2, '0')}</span>
+                    <h3 class="art-title">${escapeHtml(m.title)}</h3>
+                    <p class="art-desc">${escapeHtml(m.desc)}</p>
+                </div>
+            </div>`).join('\n');
+
+            const quoteHtml = appData.general.quote.replace(/\n/g, '<br>');
+            const poemHtml = escapeHtml(appData.poetry.poemText);
+            const perfDescHtml = escapeHtml(appData.poetry.perfDesc).replace(/\n/g, '<br>');
+
+            return `<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <title>${escapeHtml(appData.general.mainTitle)} | EXHIBITION 2026 - ${escapeHtml(appData.general.artistName)}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 아이콘 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-dark: #04070d;
+            --bg-card: #0c1424;
+            --text-gold: #e5c37e;
+            --text-teal: #38b6d3;
+            --stamp-red: #c93b2b;
+            --text-light: #f3f6fa;
+            --text-sub: #b2c3d4;
+            --text-muted: #8395a8;
+            --border-color: rgba(255, 255, 255, 0.14);
+            --font-sans: 'Montserrat', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.8;
+            word-break: keep-all;
+            overflow-x: hidden;
+            letter-spacing: 0.02em;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--text-teal); outline-offset: 3px; }
+
+        header {
+            position: fixed; top: 0; left: 0; width: 100%;
+            padding: 14px 30px; display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; background: rgba(4, 7, 13, 0.92); backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-family: var(--font-sans); font-size: 1.05rem; font-weight: 500; letter-spacing: 0.12em;
+            color: #fff; text-decoration: none; display: flex; align-items: center; gap: 10px; text-transform: uppercase;
+        }
+
+        nav.desktop-nav a {
+            color: var(--text-sub); text-decoration: none; margin-left: 28px;
+            font-size: 0.88rem; font-weight: 500; letter-spacing: 1.2px; transition: color 0.25s, text-shadow 0.25s;
+        }
+        nav.desktop-nav a:hover { color: var(--text-teal); text-shadow: 0 0 10px rgba(56, 182, 211, 0.6); }
+
+        .mobile-menu-btn { display: none; background: transparent; border: none; color: #fff; font-size: 1.55rem; cursor: pointer; padding: 8px; z-index: 1001; line-height: 1; }
+        .mobile-drawer {
+            position: fixed; top: 0; right: -100%; width: 80%; max-width: 320px; height: 100vh;
+            background: #091222; border-left: 1px solid var(--border-color); padding: 85px 20px 30px;
+            display: flex; flex-direction: column; gap: 16px; z-index: 1000;
+            transition: right 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: -10px 0 35px rgba(0,0,0,0.85);
+        }
+        .mobile-drawer.open { right: 0; }
+        .mobile-drawer a {
+            color: #e3edf8; text-decoration: none; font-size: 1.05rem; font-weight: 500; padding: 14px 12px;
+            border-radius: 8px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; align-items: center; gap: 12px; transition: background 0.2s;
+        }
+        .mobile-drawer a:active { background: rgba(56, 182, 211, 0.15); border-color: var(--text-teal); }
+        .mobile-drawer a i { color: var(--text-teal); width: 22px; }
+
+        .drawer-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 999; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+        .drawer-backdrop.open { display: block; }
+
+        .hero {
+            position: relative; padding: 95px 15px 25px;
+            background: radial-gradient(circle at 50% 30%, #10233a 0%, #080f1b 65%, var(--bg-dark) 100%);
+            display: flex; flex-direction: column; align-items: center; text-align: center; overflow: hidden;
+        }
+
+        .banner-container {
+            width: 100%; max-width: 1200px; margin: 15px auto 30px; position: relative;
+            border-radius: 12px; overflow: hidden; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 182, 211, 0.2);
+            border: 1px solid rgba(56, 182, 211, 0.25);
+        }
+        .banner-container img { width: 100%; height: auto; display: block; object-fit: cover; }
+
+        .hero-details { max-width: 800px; margin: 0 auto; }
+        .quote-box {
+            font-style: italic; font-size: 1.05rem; color: #dbe4ee; line-height: 1.8;
+            border-top: 1px solid rgba(255, 255, 255, 0.15); border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 15px 25px; margin-bottom: 5px; text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        }
+
+        .reveal-item {
+            opacity: 0; transform: translate3d(0, 24px, 0);
+            transition: opacity 0.75s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-item.active { opacity: 1; transform: translate3d(0, 0, 0); }
+
+        section { padding: 40px 18px; max-width: 1240px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-tag {
+            font-family: var(--font-sans); font-size: 0.85rem; letter-spacing: 4px;
+            color: var(--text-teal); text-transform: uppercase; margin-bottom: 8px; display: block; font-weight: 600;
+        }
+        .section-title {
+            font-family: var(--font-sans); font-size: 2.1rem; font-weight: 500; color: #fff;
+            position: relative; display: inline-block; padding-bottom: 15px; letter-spacing: 0.04em;
+        }
+        .section-title::after {
+            content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 45px; height: 2px; background: var(--stamp-red); box-shadow: 0 0 8px rgba(201, 59, 43, 0.8);
+        }
+
+        .concept-container {
+            position: relative; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 35px;
+            background: radial-gradient(circle at 60% 40%, #11233d 0%, #081120 70%, #050b14 100%);
+            border: 1px solid var(--border-color); border-radius: 14px; padding: 35px 30px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.7); align-items: center; overflow: hidden;
+        }
+
+        .concept-container::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(1.5px 1.5px at 40px 60px, rgba(255,255,255,0.9), rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 120px 180px, var(--text-teal), rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 220px 80px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2.5px 2.5px at 340px 240px, var(--text-gold), rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 480px 130px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 600px 70px, var(--text-teal), rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 720px 210px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 850px 140px, rgba(255,255,255,0.85), rgba(0,0,0,0));
+            background-size: 550px 350px; pointer-events: none; opacity: 0.55;
+            animation: twinkleStars 5s infinite alternate ease-in-out; z-index: 1;
+        }
+
+        @keyframes twinkleStars {
+            0% { opacity: 0.3; transform: scale(0.99); }
+            50% { opacity: 0.75; }
+            100% { opacity: 0.4; transform: scale(1.01); }
+        }
+
+        .poem-viewport {
+            position: relative; height: 380px; overflow: hidden;
+            border-left: 2px solid var(--text-teal); padding-left: 24px; z-index: 2; pointer-events: none;
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 8%, black 20%, black 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 8%, black 20%, black 100%);
+        }
+
+        .poem-text {
+            font-family: var(--font-sans); font-size: 1.05rem; line-height: 2.2; color: #e0eaf3;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.8); white-space: pre-line; will-change: transform;
+            animation: pcCreditScroll ${speed}s linear infinite 1.5s; animation-fill-mode: both;
+        }
+
+        @keyframes pcCreditScroll {
+            0% { transform: translate3d(0, 18%, 0); opacity: 1; }
+            85% { opacity: 1; }
+            100% { transform: translate3d(0, -100%, 0); opacity: 0; }
+        }
+
+        .poem-signature { margin-top: 25px; display: flex; align-items: center; gap: 12px; font-weight: bold; color: #fff; }
+
+        .performance-card {
+            position: relative; background: rgba(255,255,255,0.04); border: 1px solid rgba(56, 182, 211, 0.25);
+            border-radius: 12px; padding: 24px 20px; text-align: center; z-index: 2; backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px); box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+        .performance-card h3 { font-family: var(--font-sans); font-size: 1.7rem; font-weight: 500; letter-spacing: 0.05em; color: #ffffff; margin-bottom: 3px; text-transform: uppercase; }
+        .performance-card .perf-sub { letter-spacing: 2px; color: var(--text-teal); font-weight: 600; margin-bottom: 2px; }
+        .performance-card .time { font-family: var(--font-sans); color: var(--text-gold); font-weight: 600; font-size: 1.15rem; margin-bottom: 8px; text-shadow: 0 0 10px rgba(229, 195, 126, 0.3); }
+        .performance-card p { color: var(--text-sub); font-size: 0.95rem; line-height: 1.7; }
+
+        .gallery-nav { display: flex; justify-content: center; gap: 12px; margin-bottom: 35px; flex-wrap: wrap; }
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-sub);
+            padding: 11px 26px; font-size: 0.92rem; font-family: var(--font-sans); font-weight: 500; border-radius: 30px;
+            cursor: pointer; transition: all 0.25s ease; text-align: center;
+        }
+        .tab-btn.active, .tab-btn:hover { background: var(--text-teal); color: #06111e; border-color: var(--text-teal); font-weight: 700; box-shadow: 0 0 16px rgba(56, 182, 211, 0.45); }
+
+        .art-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; }
+        .art-card {
+            background: var(--bg-card); border-radius: 10px; overflow: hidden; border: 1px solid var(--border-color);
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s, border-color 0.3s; cursor: pointer; position: relative;
+        }
+        .art-card:hover { transform: translateY(-6px); box-shadow: 0 14px 30px rgba(0,0,0,0.7), 0 0 15px rgba(56, 182, 211, 0.2); border-color: rgba(56, 182, 211, 0.55); }
+
+        .art-thumb { width: 100%; height: 260px; position: relative; background-color: #0a101d; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .art-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .art-card:hover .art-thumb img { transform: scale(1.07); }
+
+        .zoom-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(4, 7, 13, 0.65);
+            display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; color: #fff; font-size: 1.5rem; backdrop-filter: blur(2px);
+        }
+        .art-card:hover .zoom-overlay { opacity: 1; }
+
+        .art-info { padding: 16px 18px; background: #08101d; border-top: 1px solid rgba(255,255,255,0.05); }
+        .art-tag { font-size: 0.72rem; color: var(--text-teal); font-family: var(--font-sans); font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; }
+        .art-title { font-size: 1.05rem; font-weight: 500; color: #fff; margin: 3px 0 5px; line-height: 1.4; }
+        .art-desc { font-size: 0.84rem; color: var(--text-sub); line-height: 1.5; }
+
+        .merch-badge {
+            position: absolute; top: 10px; right: 10px; background: rgba(7, 11, 18, 0.9);
+            border: 1px solid var(--text-gold); color: var(--text-gold); font-size: 0.7rem; padding: 3px 9px;
+            border-radius: 20px; font-family: var(--font-sans); font-weight: 600; z-index: 2; box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .info-map-wrapper { display: grid; grid-template-columns: 1fr 1.2fr; gap: 35px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .info-details { padding: 35px; display: flex; flex-direction: column; justify-content: center; }
+        .info-list { list-style: none; margin-top: 18px; }
+        .info-list li { display: flex; align-items: flex-start; margin-bottom: 20px; gap: 16px; }
+        .info-list i { color: var(--text-teal); font-size: 1.25rem; margin-top: 4px; }
+        .info-list .item-title { font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-sans); font-weight: 600; letter-spacing: 1.5px; display: block; text-transform: uppercase; }
+        .info-list .item-content { font-size: 1.05rem; color: #ffffff; font-weight: 500; }
+
+        .map-container { width: 100%; min-height: 400px; position: relative; }
+        .map-container iframe { width: 100%; height: 100%; border: 0; }
+        .map-actions { margin-top: 22px; display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn-map { background: var(--text-teal); color: #06111e; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.92rem; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.25s; box-shadow: 0 4px 15px rgba(56, 182, 211, 0.3); }
+
+        .modal { display: none; position: fixed; z-index: 2000; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(3, 5, 10, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 16px; touch-action: pan-y; }
+        .modal-content { position: relative; max-width: 900px; width: 100%; background: #0b1424; border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; animation: modalFadeIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 20px 50px rgba(0,0,0,0.85); user-select: none; }
+        @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+        .modal-img-container { width: 100%; max-height: 60vh; background: #03060c; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; cursor: grab; }
+        .modal-img-container img { max-width: 100%; max-height: 60vh; object-fit: contain; pointer-events: none; }
+        .modal-nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(10, 18, 30, 0.75); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 1.3rem; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.25s; z-index: 5; }
+        .modal-nav-btn:hover { background: var(--text-teal); color: #05080e; border-color: var(--text-teal); }
+        .modal-nav-btn.prev { left: 12px; }
+        .modal-nav-btn.next { right: 12px; }
+        .modal-caption { padding: 20px 24px; background: #0b1424; border-top: 1px solid rgba(255,255,255,0.08); }
+        .modal-title { font-size: 1.3rem; font-weight: 500; color: #fff; margin-bottom: 5px; }
+        .modal-category { color: var(--text-teal); font-size: 0.82rem; font-family: var(--font-sans); font-weight: 600; letter-spacing: 1.5px; margin-bottom: 6px; }
+        .modal-desc { color: var(--text-sub); font-size: 0.92rem; line-height: 1.6; }
+        .close-modal { position: absolute; top: 12px; right: 18px; color: #fff; font-size: 32px; font-weight: 300; cursor: pointer; z-index: 10; transition: color 0.2s, transform 0.2s; }
+        .close-modal:hover { color: var(--stamp-red); transform: scale(1.15); }
+
+        .scroll-top-btn { position: fixed; bottom: calc(25px + env(safe-area-inset-bottom)); right: 22px; width: 46px; height: 46px; border-radius: 50%; background: rgba(12, 20, 36, 0.9); border: 1px solid var(--text-teal); color: var(--text-teal); display: flex; align-items: center; justify-content: center; font-size: 1.15rem; cursor: pointer; z-index: 990; opacity: 0; visibility: hidden; transform: translateY(20px); transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 4px 18px rgba(0,0,0,0.6); }
+        .scroll-top-btn.show { opacity: 1; visibility: visible; transform: translateY(0); }
+
+        footer { background: #020408; border-top: 1px solid rgba(255, 255, 255, 0.08); padding: 40px 20px calc(40px + env(safe-area-inset-bottom)); text-align: center; }
+        .footer-brand { font-family: var(--font-sans); font-size: 1.15rem; font-weight: 500; color: #fff; margin-bottom: 6px; letter-spacing: 0.12em; text-transform: uppercase; }
+        .footer-copy { font-family: var(--font-sans); font-size: 0.82rem; color: var(--text-muted); letter-spacing: 1px; }
+        .mobile-br { display: none; }
+
+        @media (max-width: 900px) {
+            .mobile-br { display: block; }
+            header { padding: 12px 18px; }
+            nav.desktop-nav { display: none; }
+            .mobile-menu-btn { display: block; }
+            .concept-container, .info-map-wrapper { grid-template-columns: 1fr; padding: 26px 18px; gap: 25px; }
+            .map-container { min-height: 300px; }
+            .info-details { padding: 20px 10px; }
+            .btn-map { width: 100%; }
+            .poem-viewport { height: 320px; padding-left: 14px; overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 8%, black 20%, black 100%); mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 8%, black 20%, black 100%); }
+            .poem-text { font-size: 0.92rem; line-height: 2.05; will-change: transform; animation: mobileCreditScroll 34s linear infinite 1.5s; animation-fill-mode: both; }
+            @keyframes mobileCreditScroll { 0% { transform: translate3d(0, 12%, 0); opacity: 1; } 85% { opacity: 1; } 100% { transform: translate3d(0, -100%, 0); opacity: 0; } }
+            
+            .gallery-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; max-width: 420px; margin: 0 auto 26px; padding: 0; overflow: visible; }
+            .gallery-nav .tab-btn { width: 100%; padding: 11px 8px; font-size: 0.88rem; border-radius: 8px; white-space: nowrap; }
+            .gallery-nav .tab-btn:first-child { grid-column: 1 / -1; padding: 12px 8px; font-size: 0.92rem; }
+
+            .art-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .art-thumb { height: 160px; }
+            .art-info { padding: 10px 8px; }
+            .art-title { font-size: 0.9rem; margin: 2px 0 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            .art-desc { font-size: 0.74rem; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+            .art-tag { font-size: 0.65rem; }
+            .modal-nav-btn { width: 38px; height: 38px; font-size: 1.1rem; }
+            .modal-caption { padding: 16px 18px; }
+            .modal-title { font-size: 1.15rem; }
+            .modal-desc { font-size: 0.85rem; }
+        }
+
+        @media screen and (max-width: 768px) {
+            .section-title {
+                display: block !important; white-space: nowrap !important; overflow: visible !important;
+                text-align: center !important; font-size: 1.8rem !important; font-weight: 500 !important;
+                letter-spacing: -0.06em !important; position: relative !important; transform: none !important;
+                width: 100% !important; padding-bottom: 15px !important; padding-left: 10% !important;
+                padding-right: 10% !important; box-sizing: border-box !important; margin: 0 auto !important;
+            }
+            .section-title::after { bottom: 0 !important; left: 50% !important; transform: translateX(-50%) !important; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="#" class="logo">
+            <span style="display:inline-block;width:104px;height:76.8px;vertical-align:middle;background:url('${appData.general.logoUrl}') no-repeat center/contain;"></span>
+            ${escapeHtml(appData.general.artistName)}
+        </a>
+        <nav class="desktop-nav">
+            <a href="#about">EXHIBITION</a>
+            <a href="#gallery">WORKS (${appData.artworks.length})</a>
+            <a href="#merch">T-SHIRTS (${appData.merch.length})</a>
+            <a href="#performance">PERFORMANCE</a>
+            <a href="#location">LOCATION</a>
+        </nav>
+        <button class="mobile-menu-btn" onclick="toggleMobileDrawer()" aria-label="메뉴 열기"><i class="fa-solid fa-bars"></i></button>
+    </header>
+
+    <div class="drawer-backdrop" id="drawerBackdrop" onclick="toggleMobileDrawer()"></div>
+    <div class="mobile-drawer" id="mobileDrawer">
+        <a href="#about" onclick="toggleMobileDrawer()"><i class="fa-solid fa-feather-pointed"></i> 작가의 글 (Note)</a>
+        <a href="#gallery" onclick="toggleMobileDrawer()"><i class="fa-solid fa-palette"></i> 전시 작품 (Works ${appData.artworks.length})</a>
+        <a href="#merch" onclick="toggleMobileDrawer()"><i class="fa-solid fa-shirt"></i> 공식 굿즈 (T-Shirts)</a>
+        <a href="#performance" onclick="toggleMobileDrawer()"><i class="fa-solid fa-paintbrush"></i> 퍼포먼스 안내</a>
+        <a href="#location" onclick="toggleMobileDrawer()"><i class="fa-solid fa-location-dot"></i> 전시 장소 & 지도</a>
+    </div>
+
+    <section class="hero">
+        <div class="banner-container">
+            <img src="${appData.general.bannerUrl}" alt="${escapeHtml(appData.general.mainTitle)}">
+        </div>
+        <div class="hero-details">
+            <div class="quote-box">${quoteHtml}</div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="section-header reveal-item">
+            <span class="section-tag">Artist Note & Poetry</span>
+            <h2 class="section-title">작가의 글</h2>
+        </div>
+        <div class="concept-container reveal-item">
+            <div class="poem-viewport">
+                <div class="poem-text">
+${poemHtml}
+<div class="poem-signature">
+    <img width="100%" src="${appData.poetry.signatureUrl}">
+</div>
+                </div>
+            </div>
+            <div class="performance-card" id="performance">
+                <img src="${appData.poetry.perfImgUrl}" alt="Performance Image" style="width: 100%; max-width: 250px; display: block; margin: 0 auto 10px auto; border-radius: 10px; box-shadow: 0 4px 22px rgba(56,182,211,0.25);">
+                <h3>${escapeHtml(appData.poetry.perfTitle)}</h3>
+                <p class="perf-sub">${escapeHtml(appData.poetry.perfSub)}</p>
+                <div class="time">${escapeHtml(appData.poetry.perfTime)}</div>
+                <p>${perfDescHtml}</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery">
+        <div class="section-header reveal-item">
+            <span class="section-tag">Selected Works (Total ${appData.artworks.length})</span>
+            <h2 class="section-title">전시 작품 갤러리</h2>
+        </div>
+        <div class="gallery-nav reveal-item">
+            <button class="tab-btn active" onclick="filterGallery('all', this)">전체 작품 (All ${appData.artworks.length})</button>
+            <button class="tab-btn" onclick="filterGallery('painting', this)">그림 (Painting ${appData.artworks.filter(a=>a.category==='painting').length})</button>
+            <button class="tab-btn" onclick="filterGallery('calligraphy', this)">글씨 (Calligraphy ${appData.artworks.filter(a=>a.category==='calligraphy').length})</button>
+        </div>
+        <div class="art-grid" id="artGrid">
+${artworksHtml}
+        </div>
+    </section>
+
+    <section id="merch" style="background: rgba(255, 255, 255, 0.015); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+        <div class="section-header reveal-item">
+            <span class="section-tag">Exhibition Official Goods</span>
+            <h2 class="section-title">전시회 공식 티셔츠 (${appData.merch.length}종)</h2>
+            <p style="color: var(--text-sub); font-size: 0.95rem; margin-top: 12px;">
+                작가의 한글 캘리그라피와 작품 모티브가 프린트된 검정 반팔 티셔츠 20수 한정판 컬렉션입니다.
+            </p>
+        </div>
+        <div class="art-grid">
+${merchHtml}
+        </div>
+    </section>
+
+    <section id="location">
+        <div class="section-header reveal-item">
+            <span class="section-tag">Venue & Information</span>
+            <h2 class="section-title">전시 장소 및<br class="mobile-br"> 관람 안내</h2>
+        </div>
+        <div class="info-map-wrapper reveal-item">
+            <div class="info-details">
+                <h3 style="font-size: 1.6rem; font-weight: 500; color: #fff; margin-bottom: 15px;">${escapeHtml(appData.general.galleryName)}</h3>
+                <ul class="info-list">
+                    <li><i class="fa-solid fa-location-dot"></i><div><span class="item-title">ADDRESS</span><span class="item-content">${escapeHtml(appData.general.galleryAddress)}</span></div></li>
+                    <li><i class="fa-regular fa-clock"></i><div><span class="item-title">DATE & TIME</span><span class="item-content">${escapeHtml(appData.general.schedule)}</span></div></li>
+                    <li><i class="fa-solid fa-champagne-glasses"></i><div><span class="item-title">OPENING RECEPTION</span><span class="item-content">${escapeHtml(appData.general.opening)}</span></div></li>
+                    <li><i class="fa-solid fa-wand-magic-sparkles"></i><div><span class="item-title">SPECIAL PERFORMANCE</span><span class="item-content">${escapeHtml(appData.poetry.perfTime)} (Main Hall)</span></div></li>
+                </ul>
+                <div class="map-actions">
+                    <a href="${appData.general.mapUrl}" target="_blank" class="btn-map"><i class="fa-solid fa-diamond-turn-right"></i> 구글 지도 길찾기</a>
+                </div>
+            </div>
+            <div class="map-container">
+                <iframe title="EK Gallery Map" src="https://maps.google.com/maps?q=${encodeURIComponent(appData.general.galleryAddress)}&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <div id="artModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-modal" onclick="closeModalDirect()" aria-label="닫기">&times;</span>
+            <div class="modal-img-container" id="modalImgContainer">
+                <button class="modal-nav-btn prev" onclick="navigateModal(-1)" aria-label="이전 작품"><i class="fa-solid fa-chevron-left"></i></button>
+                <img id="modalImg" src="" alt="작품 크게보기">
+                <button class="modal-nav-btn next" onclick="navigateModal(1)" aria-label="다음 작품"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            <div class="modal-caption">
+                <div id="modalCategory" class="modal-category"></div>
+                <h3 id="modalTitle" class="modal-title"></h3>
+                <p id="modalDesc" class="modal-desc"></p>
+            </div>
+        </div>
+    </div>
+
+    <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()" aria-label="상단으로 이동"><i class="fa-solid fa-arrow-up"></i></button>
+
+    <footer>
+        <div class="footer-brand">${escapeHtml(appData.general.artistName)}</div>
+        <p class="footer-copy">@copylight by Moon-light hunter 2026</p>
+    </footer>
+
+    <script>
+        const galleryItems = ${JSON.stringify(allItems, null, 8)};
+        let currentModalIndex = 0;
+
+        function openModalIndex(index) {
+            currentModalIndex = index;
+            renderModalContent();
+            document.getElementById('artModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        function renderModalContent() {
+            const item = galleryItems[currentModalIndex];
+            if (!item) return;
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalCategory').innerText = item.category;
+            document.getElementById('modalDesc').innerText = item.desc;
+            document.getElementById('modalImg').src = item.img;
+        }
+        function navigateModal(direction) {
+            currentModalIndex += direction;
+            if (currentModalIndex < 0) currentModalIndex = galleryItems.length - 1;
+            if (currentModalIndex >= galleryItems.length) currentModalIndex = 0;
+            renderModalContent();
+        }
+        function closeModal(e) { if (e.target.classList.contains('modal')) closeModalDirect(); }
+        function closeModalDirect() { document.getElementById('artModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
+
+        let touchStartX = 0, touchEndX = 0;
+        const modalContainer = document.getElementById('modalImgContainer');
+        modalContainer.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+        modalContainer.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].screenX; if (Math.abs(touchEndX - touchStartX) > 40) { if (touchEndX - touchStartX < 0) navigateModal(1); else navigateModal(-1); } }, { passive: true });
+
+        document.addEventListener('keydown', function(e) {
+            const modal = document.getElementById('artModal');
+            if (modal.style.display === 'flex') {
+                if (e.key === "Escape") closeModalDirect();
+                if (e.key === "ArrowLeft") navigateModal(-1);
+                if (e.key === "ArrowRight") navigateModal(1);
+            }
+        });
+
+        function filterGallery(category, btnElement) {
+            const cards = document.querySelectorAll('#artGrid .art-card');
+            const buttons = document.querySelectorAll('.gallery-nav .tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            if(btnElement) btnElement.classList.add('active');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) card.style.display = 'block';
+                else card.style.display = 'none';
+            });
+        }
+
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('mobileDrawer');
+            const backdrop = document.getElementById('drawerBackdrop');
+            const isOpen = drawer.classList.toggle('open');
+            backdrop.classList.toggle('open');
+            document.body.style.overflow = isOpen ? 'hidden' : 'auto';
+        }
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        window.addEventListener('scroll', () => {
+            const topBtn = document.getElementById('scrollTopBtn');
+            if (window.scrollY > 380) topBtn.classList.add('show');
+            else topBtn.classList.remove('show');
+        }, { passive: true });
+
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.08 });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.reveal-item').forEach(el => revealObserver.observe(el));
+        });
+    <\/script>
+</body>
+</html>`;
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+            }[tag] || tag));
+        }
+
+        function updateLivePreview() {
+            const htmlContent = generateProductionHtml();
+            document.getElementById('previewFrame').srcdoc = htmlContent;
+        }
+
+        function exportHtmlFile() {
+            const htmlContent = generateProductionHtml();
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            showToast('index.html 파일이 다운로드되었습니다.');
+        }
+    </script>
+</body>
+</html>
